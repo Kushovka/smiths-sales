@@ -18,6 +18,7 @@ from app.services.vehicle_service import (
 
 router = APIRouter(prefix="/vehicles", tags=["vehicles"])
 MEDIA_ROOT = Path("app/static/media").resolve()
+PLACEHOLDER_IMAGES = ["/images/vehicle-photo-coming-soon.png"] * 5
 
 
 def resolved_media_path(path: str) -> str | None:
@@ -64,6 +65,8 @@ def public_vehicle_details(details: dict | None) -> dict:
 
 def serialize_vehicle(vehicle, image_limit: int | None = None) -> dict:
     all_images = existing_images(vehicle.images)
+    if not all_images:
+        all_images = PLACEHOLDER_IMAGES
     images = all_images[:image_limit] if image_limit is not None else all_images
 
     return {
@@ -168,6 +171,8 @@ def get_vehicle_images(
         raise HTTPException(status_code=404, detail="Vehicle not found")
 
     images = existing_images(vehicle.images)
+    if not images:
+        images = PLACEHOLDER_IMAGES
     items = images[offset : offset + limit]
     next_offset = offset + len(items)
     return {
