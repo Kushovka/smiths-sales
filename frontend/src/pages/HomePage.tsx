@@ -139,8 +139,16 @@ export const HomePage = () => {
   const prefersReducedMotion = useReducedMotion();
   const [featured, setFeatured] = useState<Vehicle[]>([]);
   const [featuredPage, setFeaturedPage] = useState(0);
+  const [isMobileFeatured, setIsMobileFeatured] = useState(() => window.matchMedia('(max-width: 640px)').matches);
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [featuredError, setFeaturedError] = useState(false);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 640px)');
+    const updateMobileLayout = () => setIsMobileFeatured(mobileQuery.matches);
+    mobileQuery.addEventListener('change', updateMobileLayout);
+    return () => mobileQuery.removeEventListener('change', updateMobileLayout);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -182,9 +190,14 @@ export const HomePage = () => {
     };
   }, []);
 
-  const featuredPageCount = Math.max(1, Math.ceil(featured.length / 4));
-  const featuredStart = Math.min(featuredPage * 4, Math.max(0, featured.length - 4));
-  const visibleFeaturedVehicles = featured.slice(featuredStart, featuredStart + 4);
+  const featuredPageCount = Math.max(1, isMobileFeatured ? featured.length : Math.ceil(featured.length / 4));
+  const activeFeaturedPage = featuredPage % featuredPageCount;
+  const featuredStart = isMobileFeatured
+    ? (featured.length ? activeFeaturedPage : 0)
+    : Math.min(activeFeaturedPage * 4, Math.max(0, featured.length - 4));
+  const visibleFeaturedVehicles = isMobileFeatured
+    ? Array.from({ length: Math.min(4, featured.length) }, (_, index) => featured[(featuredStart + index) % featured.length])
+    : featured.slice(featuredStart, featuredStart + 4);
   const changeFeaturedPage = (direction: -1 | 1) => {
     setFeaturedPage((current) => (current + direction + featuredPageCount) % featuredPageCount);
   };
@@ -226,7 +239,7 @@ export const HomePage = () => {
             <button type="button" aria-label="Show previous featured vehicles" disabled={featuredPageCount <= 1} onClick={() => changeFeaturedPage(-1)}><FaArrowLeft /></button>
             <button type="button" aria-label="Show next featured vehicles" disabled={featuredPageCount <= 1} onClick={() => changeFeaturedPage(1)}><FaArrowRight /></button>
           </div>
-          <span className="home-inventory-carousel__count" aria-live="polite">{String(Math.min(featuredPage + 1, featuredPageCount)).padStart(2, "0")} <i /> {String(featuredPageCount).padStart(2, "0")}</span>
+          <span className="home-inventory-carousel__count" aria-live="polite">{String(activeFeaturedPage + 1).padStart(2, "0")} <i /> {String(featuredPageCount).padStart(2, "0")}</span>
         </div>
         <div className="home-inventory-carousel__content">
           {featuredLoading ? <FeaturedVehiclesSkeleton /> : featuredError ? (

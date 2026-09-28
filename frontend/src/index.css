@@ -724,7 +724,7 @@
     .reviews-banner__image { width: 62%; }
     .reviews-banner__heading { padding-left: 26px; }
     .reviews-banner__heading h2 { font-size: clamp(25px, 3vw, 32px); }
-    .reviews-banner__arrows { flex-direction: column; align-items: flex-end; gap: 10px; padding-right: 18px; }
+    .reviews-banner__arrows { flex-direction: row; align-items: center; gap: 10px; padding-right: 18px; }
     .reviews-banner__arrows button { width: 42px; height: 42px; }
   }
 
@@ -740,8 +740,10 @@
     .reviews-banner__author { margin-top: 12px; font-size: 13px; }
     .reviews-banner__dots { justify-content: flex-start; gap: 7px; margin-top: 18px; }
     .reviews-banner__dots button { width: 8px; height: 8px; flex-basis: 8px; }
-    .reviews-banner__arrows { align-self: end; gap: 8px; padding: 0 0 1px; }
+    .reviews-banner__arrows { align-self: end; flex-direction: row; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 0 1px; }
     .reviews-banner__arrows button { width: 38px; height: 38px; }
+    .reviews-banner__arrows button:focus:not(:focus-visible) { outline: none; }
+    .reviews-banner__arrows button:focus-visible { outline: 2px solid #f2b52e; outline-offset: 2px; }
   }
 
   .visit-dealership-section { position: relative; overflow: hidden; padding: 32px 0 0; background: #f4f4f2; }
