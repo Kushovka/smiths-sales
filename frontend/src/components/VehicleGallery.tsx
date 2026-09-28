@@ -60,7 +60,7 @@ export const VehicleGallery = ({ images, imagesTotal, slug, title, onShowPhotos,
   const goTo = useCallback(async (index: number) => {
     const nextIndex = index < 0 ? totalImages - 1 : index >= totalImages ? 0 : index
     if (nextIndex < loadedImages.length) {
-      setImageLoading(true)
+      setImageLoading(loadedImages[nextIndex] !== loadedImages[active])
       setActive(nextIndex)
       setZoomed(false)
       return
@@ -74,14 +74,14 @@ export const VehicleGallery = ({ images, imagesTotal, slug, title, onShowPhotos,
       setLoadedImages((current) => [...current, ...additions])
       setTotalImages(response.total)
       if (nextIndex < loadedImages.length + additions.length) {
-        setImageLoading(true)
+        setImageLoading(additions[nextIndex - loadedImages.length] !== loadedImages[active])
         setActive(nextIndex)
         setZoomed(false)
       }
     } finally {
       setLoadingMore(false)
     }
-  }, [loadedImages, loadingMore, slug, totalImages])
+  }, [active, loadedImages, loadingMore, slug, totalImages])
 
   const previous = useCallback(() => { void goTo(active - 1) }, [active, goTo])
   const next = useCallback(() => { void goTo(active + 1) }, [active, goTo])

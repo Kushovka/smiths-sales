@@ -11,28 +11,9 @@ import type { Vehicle } from "../types/vehicle";
 import { formatNumber, formatPrice } from "../utils/format";
 import { autoDealerSchema } from "../utils/schema";
 
-const featuredCutouts: Record<string, string> = {
-  "2021-porsche-cayenne-turbo": "/images/featured-cars/porsche-cayenne.webp",
-  "2019-tesla-model-x-performance": "/images/featured-cars/tesla-model-x.webp",
-  "2020-audi-s8": "/images/featured-cars/audi-s8.webp",
-  "2023-chevrolet-silverado-1500-rst-black-widow": "/images/featured-cars/chevrolet-silverado-1500.webp",
-  "2024-ram-1500-trx-final-edition": "/images/featured-cars/ram-1500-trx.webp",
-  "2019-mercedes-amg-g63": "/images/featured-cars/mercedes-amg-g63.webp",
-  "2021-ford-f-150-raptor-supercrew": "/images/featured-cars/ford-f150-raptor.webp",
-  "2020-chevrolet-corvette-stingray-2lt": "/images/featured-cars/chevrolet-corvette.webp",
-  "2021-toyota-land-cruiser-urj200-22k": "/images/featured-cars/toyota-land-cruiser.webp",
-  "2021-toyota-land-cruiser-urj200-23k": "/images/featured-cars/toyota-land-cruiser-23k.webp",
-  "2025-toyota-land-cruiser-j250": "/images/featured-cars/toyota-land-cruiser-j250.webp",
-  "2024-chevrolet-corvette-z06-convertible-3lz": "/images/featured-cars/corvette-z06-convertible.webp",
-  "2024-chevrolet-corvette-stingray-3lt-z51": "/images/featured-cars/corvette-stingray-2024.webp",
-  "2024-gmc-sierra-2500hd-denali-ultimate": "/images/featured-cars/gmc-sierra-2500hd.webp",
-  "2023-cadillac-escalade-v": "/images/featured-cars/cadillac-escalade-v.webp",
-  "2022-gmc-sierra-1500-limited-harley-davidson": "/images/featured-cars/gmc-sierra-1500.webp",
-};
-
 const FeaturedVehicleShowcase = ({ vehicle }: { vehicle: Vehicle }) => {
   const title = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-  const image = featuredCutouts[vehicle.slug] ?? vehicle.images[0];
+  const image = vehicle.images[0];
   return (
     <article className="home-inventory-card group">
       <Link

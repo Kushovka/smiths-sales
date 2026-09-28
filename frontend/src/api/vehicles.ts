@@ -109,7 +109,8 @@ const apiOrigin = (() => {
   }
 })()
 
-const fallbackVehicleImage = 'https://streetviewpixels-pa.googleapis.com/v1/thumbnail?cb_client=maps_sv.tactile&w=900&h=600&pitch=3.806508641649941&panoid=eMo88YOPWzb1MRZg7tLxVA&yaw=110.79005693573947'
+const placeholderVehicleImage = '/images/vehicle-photo-coming-soon.png'
+const placeholderGalleryImages = Array.from({ length: 5 }, () => placeholderVehicleImage)
 
 const resolveImageUrl = (image: string) => {
   if (image.startsWith('/media/')) {
@@ -126,7 +127,7 @@ const toVehicleDetails = (details?: ApiVehicle['details']): VehicleDetails => ({
 })
 
 const toVehicle = (vehicle: ApiVehicle): Vehicle => {
-  const sourceImages = vehicle.images.length > 0 ? vehicle.images : [fallbackVehicleImage]
+  const sourceImages = vehicle.images.length > 0 ? vehicle.images : placeholderGalleryImages
   const images = sourceImages.map(resolveImageUrl)
 
   return {
