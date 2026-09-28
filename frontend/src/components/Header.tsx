@@ -27,6 +27,7 @@ const mobileNavItems = [
 
 const isBusinessOpenNow = () => {
   const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
     weekday: 'short',
     hour: '2-digit',
     minute: '2-digit',
