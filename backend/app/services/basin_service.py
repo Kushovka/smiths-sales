@@ -1,5 +1,6 @@
 import logging
 from urllib import parse, request
+from urllib.parse import urlsplit
 
 from app.core.config import settings
 from app.schemas.lead import LeadCreate
@@ -32,10 +33,18 @@ def send_lead_to_basin(payload: LeadCreate) -> None:
         "source_page": _value(payload.source_page),
     }
     body = parse.urlencode(fields).encode("utf-8")
+    page_path = urlsplit(payload.event_source_url or "").path or "/"
+    page_path = page_path.replace("\r", "").replace("\n", "")
     basin_request = request.Request(
         settings.BASIN_FORM_ACTION,
         data=body,
-        headers={"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"},
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+            "Origin": "https://smithssales.net",
+            "Referer": f"https://smithssales.net{page_path}",
+            **({"User-Agent": payload.user_agent} if payload.user_agent else {}),
+        },
         method="POST",
     )
 
