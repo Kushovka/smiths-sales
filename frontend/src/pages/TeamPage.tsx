@@ -20,7 +20,7 @@ export const TeamPage = () => (
                 <img src={member.src} alt={member.alt} loading={index > 3 ? 'lazy' : 'eager'} className="absolute inset-0 h-full w-full object-contain object-bottom" />
               </div>
               <div className="px-4 py-4 sm:px-5 sm:py-5">
-                <h2 className="text-[25px] font-bold uppercase leading-none tracking-[-0.025em] text-[var(--color-primary)] sm:text-[29px]">{member.name}</h2>
+                <h2 className="text-[18px] font-bold uppercase leading-none tracking-[-0.025em] text-[var(--color-primary)] sm:text-[25px] lg:text-[29px]">{member.name}</h2>
                 <p className="mt-1 text-[13px] font-medium text-[var(--color-accent)] sm:text-[14px]">{member.title}</p>
               </div>
             </article>
