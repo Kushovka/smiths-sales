@@ -12,13 +12,13 @@ type ButtonProps = {
 }
 
 const variants = {
-  primary: 'bg-[var(--color-accent)] text-white shadow-sm hover:bg-[var(--color-accent-dark)] focus-visible:outline-[var(--color-accent)]',
+  primary: 'bg-[var(--color-button)] text-white shadow-sm hover:bg-[var(--color-button-hover)] focus-visible:outline-[var(--color-button)]',
   secondary: 'border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-link)] shadow-sm hover:bg-[var(--color-hover)] focus-visible:outline-[var(--color-accent)]',
   light: 'bg-[var(--color-surface)] text-[var(--color-link)] ring-1 ring-[var(--color-border)] hover:bg-[var(--color-hover)] focus-visible:outline-[var(--color-accent)]',
 }
 
 export const Button = ({ children, href, variant = 'primary', className = '', onClick }: ButtonProps) => {
-  const classes = `inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 py-3 text-base font-normal shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${variants[variant]} ${className}`
+  const classes = `site-button inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 py-3 text-base font-normal shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${variants[variant]} ${className}`
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
     const contactAction = getContactActionFromHref(href)
     if (contactAction) {

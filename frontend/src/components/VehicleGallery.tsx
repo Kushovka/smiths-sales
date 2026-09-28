@@ -111,12 +111,12 @@ export const VehicleGallery = ({ images, imagesTotal, slug, title, onShowPhotos,
           <img src={currentImage} alt={title} className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoading ? 'opacity-60' : 'opacity-100'}`} onLoad={() => setImageLoading(false)} onError={() => setImageLoading(false)} />
         </button>
         {loadedImages.length > 1 ? <>
-          <button aria-label="Previous image" className="absolute left-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-accent)] disabled:opacity-40" disabled={loadingMore} onClick={previous} type="button"><FaChevronLeft /></button>
-          <button aria-label="Next image" className="absolute right-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-accent)] disabled:opacity-40" disabled={loadingMore} onClick={next} type="button"><FaChevronRight /></button>
+          <button aria-label="Previous image" className="absolute left-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-button)] disabled:opacity-40" disabled={loadingMore} onClick={previous} type="button"><FaChevronLeft /></button>
+          <button aria-label="Next image" className="absolute right-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-button)] disabled:opacity-40" disabled={loadingMore} onClick={next} type="button"><FaChevronRight /></button>
         </> : null}
         <span className="absolute left-4 top-4 bg-black/55 px-2.5 py-1.5 text-xs font-medium text-white">{active + 1} / {totalImages}</span>
         {loadingMore ? <span className="absolute bottom-4 left-4 bg-black/65 px-3 py-2 text-xs text-white">Loading photos…</span> : null}
-        <button aria-label="View fullscreen gallery" className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-accent)]" type="button" onClick={() => setLightbox(true)}><FaExpand /></button>
+        <button aria-label="View fullscreen gallery" className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-black/75 text-sm text-white transition hover:bg-[var(--color-button)]" type="button" onClick={() => setLightbox(true)}><FaExpand /></button>
       </div>
       {sideImages.map(({ image, index }, previewIndex) => <button key={`${image}-${index}`} aria-label={previewIndex === 2 && totalImages > 4 ? 'Show all vehicle photos' : `View photo ${index + 1}`} className="group relative hidden min-h-0 overflow-hidden bg-[var(--color-primary)] sm:block" type="button" onClick={() => { if (previewIndex === 2 && totalImages > 4) { onShowPhotos(); void loadMoreImages() } else { void goTo(index); setLightbox(true) } }}>
         <img src={image} alt={`${title}, photo ${index + 1}`} className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]" loading="lazy" />

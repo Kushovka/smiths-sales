@@ -204,11 +204,11 @@ export const HomePage = () => {
           fetchPriority="high"
         />
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,8,8,.95)_0%,rgba(8,8,8,.86)_24%,rgba(8,8,8,.22)_43%,rgba(8,8,8,.015)_68%),linear-gradient(0deg,rgba(8,8,8,.08),rgba(8,8,8,0)),linear-gradient(rgba(8,8,8,.28),rgba(8,8,8,.28))]" />
-        <div className="mx-auto w-full max-w-[1550px] px-6 py-12 sm:px-10 lg:px-12">
-          <div className="max-w-[760px]">
-            <h1 className="font-['Barlow_Condensed'] text-[clamp(3rem,7vw,7rem)] font-bold uppercase leading-[.9] tracking-[.025em] text-white">GOOD USED CARS.<br />NO NONSENSE.</h1>
+        <div className="mx-auto w-full max-w-[1750px] px-6 py-12 sm:px-10 lg:px-12">
+          <div className="max-w-[1250px]">
+            <h1 className="w-fit max-w-full text-[clamp(3rem,7vw,7rem)] font-bold uppercase leading-[.9] tracking-[.025em] text-white">GOOD USED CARS.<br />NO NONSENSE.</h1>
             <p className="mt-4 max-w-[380px] text-[15px] leading-[1.55] text-white/90">Cars, trucks, and SUVs, inspected and ready for the road. Fair prices and honest service right here in Commodore, PA.</p>
-            <Link to="/inventory" className="mt-6 inline-flex h-[52px] items-center gap-3 bg-[#f7f7f4] px-7 text-[15px] font-bold uppercase tracking-[.1em] text-[#191919] transition hover:bg-[#e8e8e3]">Browse inventory <FaArrowRight className="text-lg" /></Link>
+          <Link to="/inventory" className="site-button mt-6 inline-flex h-[52px] items-center gap-3 bg-[#f7f7f4] px-7 text-[15px] font-bold uppercase tracking-[.1em] text-[#191919] transition hover:bg-[#e8e8e3]">Browse inventory <FaArrowRight className="text-lg" /></Link>
           </div>
         </div>
       </section>

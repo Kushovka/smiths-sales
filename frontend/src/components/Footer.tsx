@@ -6,7 +6,7 @@ import { trackContactCta } from '../utils/ctaTracking'
 
 const columns = [
   { title: 'Inventory', links: [['View All Inventory', '/inventory']] },
-  { title: 'Sales & Services', links: [['Warranty', '/warranty'], ['Delivery', '/delivery']] },
+  { title: 'Sales & Services', links: [['Warranty', '/warranty'], ['Guarantee', '/guarantee'], ['Delivery', '/delivery']] },
   { title: 'About', links: [['About Us', '/about'], ['Our Team', '/team']] },
   { title: 'Support', links: [['Contact Us', '/contact'], ['Privacy Policy', '/privacy-policy'], ['Terms of Service', '/terms']] },
 ]
