@@ -1325,6 +1325,42 @@ a[class*="action"] {
   box-shadow: 0 2px 6px rgb(23 23 23 / 12%) !important;
 }
 
+.mobile-menu-item,
+.mobile-menu-item[aria-current="page"] {
+  color: #181818 !important;
+  text-transform: none !important;
+}
+
+.mobile-menu-item[aria-current="page"] {
+  border-radius: 5px;
+  background: #f0eeec !important;
+  padding-inline: 8px;
+}
+
+.mobile-menu-item[aria-current="page"]::after {
+  display: none !important;
+  content: none !important;
+}
+
+.mobile-menu-item:hover,
+.mobile-menu-item[aria-current="page"]:hover {
+  background: #f0eeec !important;
+  box-shadow: none !important;
+  color: #181818 !important;
+  transform: none !important;
+}
+
+.mobile-menu-contact,
+.mobile-menu-contact-title,
+.mobile-menu-contact-detail {
+  text-transform: none !important;
+}
+
+.mobile-menu-contact:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :is(button, [role="button"], .site-button, .about-button, .delivery-button, .guarantee-button, .home-about__learn, .home-footer-cta-button, .visit-dealership-button, .contact-action, .contact-location-button, .warranty-call-button, .warranty-ask-button, .featured-vehicle-card__cta, .featured-vehicles-bottom a, .header-search-control, .header-search-submit, a[class*="button"], a[class*="cta"], a[class*="action"]),
   :is(button, a, [role="button"]) > svg,

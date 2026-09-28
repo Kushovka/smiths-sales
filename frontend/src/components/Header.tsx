@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router'
 import { FaArrowRight, FaBars, FaChevronDown, FaClock, FaMapMarkerAlt, FaPhoneAlt, FaSearch, FaTimes } from 'react-icons/fa'
+import { FiChevronRight, FiFileText, FiGrid, FiPhone, FiSearch, FiShield, FiTruck, FiUsers } from 'react-icons/fi'
 import { listVehicles } from '../api/vehicles'
 import { business } from '../data/business'
 import type { Vehicle } from '../types/vehicle'
@@ -16,13 +17,13 @@ const desktopNavItems = [
 ]
 
 const mobileNavItems = [
-  { label: 'Inventory', href: '/inventory' },
-  { label: 'Warranty', href: '/warranty' },
-  { label: 'Guarantee', href: '/guarantee' },
-  { label: 'Delivery', href: '/delivery' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
-  { label: 'Our Team', href: '/team' },
+  { label: 'Inventory', href: '/inventory', Icon: FiGrid },
+  { label: 'Warranty', href: '/warranty', Icon: FiShield },
+  { label: 'Guarantee', href: '/guarantee', Icon: FiFileText },
+  { label: 'Delivery', href: '/delivery', Icon: FiTruck },
+  { label: 'About', href: '/about', Icon: FiUsers },
+  { label: 'Contact Us', href: '/contact', Icon: FiPhone },
+  { label: 'Our Team', href: '/team', Icon: FiUsers },
 ]
 
 const isBusinessOpenNow = () => {
@@ -97,6 +98,8 @@ const HeaderSearch = () => {
 
 export const Header = () => {
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
+  const isInventoryPage = pathname === '/inventory'
   const [desktopContactOpen, setDesktopContactOpen] = useState(false)
   const [desktopContactSuppressed, setDesktopContactSuppressed] = useState(false)
   const [businessOpen, setBusinessOpen] = useState(isBusinessOpenNow)
@@ -219,68 +222,90 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="border-t border-black/10 px-5 py-2.5 2xl:hidden sm:px-8"><HeaderSearch /></div>
+      {!isInventoryPage ? <div className="border-t border-black/10 px-5 py-2.5 2xl:hidden sm:px-8"><HeaderSearch /></div> : null}
 
       <AnimatePresence>
         {open ? (
           <motion.div
-            className="z-50 overflow-y-auto px-5 pb-8 pt-5 xl:hidden"
-            style={{ position: 'fixed', inset: 0, minHeight: '100dvh', backgroundColor: '#070707', zIndex: 100 }}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="mobile-menu-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-[#090909]/90 p-2.5 xl:hidden sm:p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            onClick={(event) => { if (event.target === event.currentTarget) setOpen(false) }}
           >
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center" onClick={() => setOpen(false)}>
-              <img src="/images/smiths-sales-logo.webp" alt="Smith's Sales & Services" className="h-auto w-[132px] bg-[var(--color-surface)]" />
-            </Link>
-            <button
-              aria-label="Close menu"
-              className="grid h-11 w-11 place-items-center rounded-md border border-[rgba(255,255,255,0.18)] text-white"
-              onClick={() => setOpen(false)}
-              type="button"
+            <motion.section
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation"
+              className="mobile-menu-panel flex h-[calc(100dvh-20px)] max-h-[1280px] w-full max-w-[520px] flex-col overflow-y-auto rounded-[10px] bg-[#fbf9f7] px-6 pb-6 pt-5 text-[#171717] shadow-[0_24px_80px_rgba(0,0,0,0.35)] sm:h-[calc(100dvh-32px)] sm:px-[38px] sm:pb-7 sm:pt-6"
+              initial={{ y: 12, scale: 0.99 }}
+              animate={{ y: 0, scale: 1 }}
+              exit={{ y: 8, scale: 0.99 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(event) => event.stopPropagation()}
             >
-              <FaTimes />
-            </button>
-          </div>
+              <div className="flex shrink-0 items-start justify-between">
+                <Link to="/" className="flex items-center" onClick={() => setOpen(false)}>
+                  <img src="/images/smiths-sales-logo.webp" alt="Smith's Sales & Services" className="h-auto w-[190px] sm:w-[245px]" />
+                </Link>
+                <button
+                  aria-label="Close menu"
+                  className="grid h-10 w-10 shrink-0 place-items-center text-[28px] text-[#151515] transition hover:text-[var(--color-button)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-button)]"
+                  onClick={() => setOpen(false)}
+                  type="button"
+                >
+                  <FaTimes />
+                </button>
+              </div>
 
-          <nav className="mt-12 grid gap-1">
-            {mobileNavItems.map((item) => (
-              <NavLink
-                key={item.href}
-                to={item.href}
+              <nav aria-label="Main navigation" className="mt-7 shrink-0">
+                {mobileNavItems.map(({ label, href, Icon }) => (
+                  <NavLink
+                    key={href}
+                    to={href}
+                    onClick={() => setOpen(false)}
+                    className="mobile-menu-item group flex min-h-[68px] items-center gap-5 border-b border-[#e7e3e0] text-[18px] font-semibold tracking-[-0.02em] transition sm:min-h-[88px] sm:gap-7 sm:text-[20px]"
+                  >
+                    <Icon aria-hidden="true" className="h-[25px] w-[25px] shrink-0 stroke-[1.8] sm:h-[29px] sm:w-[29px]" />
+                    <span className="flex-1">{label}</span>
+                    <FiChevronRight aria-hidden="true" className="h-[20px] w-[20px] shrink-0 stroke-[1.8] transition-transform group-hover:translate-x-0.5" />
+                  </NavLink>
+                ))}
+              </nav>
+
+              <Link
+                to="/inventory"
+                className="site-button mt-5 inline-flex min-h-[62px] shrink-0 items-center justify-center gap-4 rounded-[8px] bg-[var(--color-button)] px-4 text-white transition hover:bg-[var(--color-button-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-button)] sm:mt-5 sm:min-h-[84px] sm:gap-5"
                 onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `border-b border-[rgba(255,255,255,0.08)] py-4 text-2xl font-normal transition ${
-                    isActive
-                      ? 'text-white'
-                      : 'text-[rgba(255,255,255,0.78)] hover:text-white'
-                  }`
-                }
               >
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
+                <FiSearch aria-hidden="true" className="h-6 w-6 stroke-[1.8]" />
+                <span>Search Inventory</span>
+                <FaArrowRight aria-hidden="true" className="text-[18px]" />
+              </Link>
 
-          <div className="mt-10 grid gap-3">
-            <Link
-              to="/inventory"
-              className="site-button inline-flex h-12 items-center justify-center bg-[var(--color-button)] px-5 text-sm font-medium uppercase tracking-[0.04em] text-white transition hover:bg-[var(--color-button-hover)]"
-              onClick={() => setOpen(false)}
-            >
-              View Inventory
-            </Link>
-            <div className="grid grid-cols-2 gap-3">
-              <a href={phoneHref} target={business.phoneHref ? undefined : '_blank'} rel={business.phoneHref ? undefined : 'noreferrer'} className="inline-flex h-12 items-center justify-center rounded-md border border-[rgba(255,255,255,0.18)] px-4 text-sm font-medium uppercase tracking-[0.04em] text-white" onClick={() => { setOpen(false); trackContactCta('phone_click', 'Mobile Menu Contact') }}>
-              Call Now
-              </a>
-              <a href={business.mapsUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center rounded-md border border-[rgba(255,255,255,0.18)] px-4 text-sm font-medium uppercase tracking-[0.04em] text-white" onClick={() => { setOpen(false); trackContactCta('directions_click', 'Mobile Menu Directions') }}>
-                Directions
-              </a>
-            </div>
-          </div>
+              <div className="mt-3 grid shrink-0 grid-cols-2 gap-3 sm:mt-6 sm:gap-4">
+                <a href={phoneHref} target={business.phoneHref ? undefined : '_blank'} rel={business.phoneHref ? undefined : 'noreferrer'} className="mobile-menu-contact grid min-h-[76px] grid-cols-[auto_minmax(0,1fr)] items-center gap-2.5 rounded-[8px] border border-[#dedad7] px-2.5 text-[#171717] transition hover:border-[var(--color-button)] sm:min-h-[94px] sm:gap-4 sm:px-4" onClick={() => { setOpen(false); trackContactCta('phone_click', 'Mobile Menu Contact') }}>
+                  <FiPhone aria-hidden="true" className="h-6 w-6 shrink-0 stroke-[1.8]" />
+                  <span className="min-w-0"><strong className="mobile-menu-contact-title block text-[14px] font-semibold sm:text-[17px]">Call Now</strong><span className="mobile-menu-contact-detail mt-0.5 block text-[11px] leading-tight text-[#66615e] sm:text-[14px]">{displayPhone}</span></span>
+                </a>
+                <a href={business.mapsUrl} target="_blank" rel="noreferrer" className="mobile-menu-contact grid min-h-[76px] grid-cols-[auto_minmax(0,1fr)] items-center gap-2.5 rounded-[8px] border border-[#dedad7] px-2.5 text-[#171717] transition hover:border-[var(--color-button)] sm:min-h-[94px] sm:gap-4 sm:px-4" onClick={() => { setOpen(false); trackContactCta('directions_click', 'Mobile Menu Directions') }}>
+                  <FaMapMarkerAlt aria-hidden="true" className="shrink-0 text-[24px]" />
+                  <span className="min-w-0"><strong className="mobile-menu-contact-title block text-[14px] font-semibold sm:text-[17px]">Directions</strong><span className="mobile-menu-contact-detail mt-0.5 block text-[11px] leading-tight text-[#66615e] sm:text-[14px]">{business.cityState}</span></span>
+                </a>
+              </div>
+
+              <div className={`mt-5 flex shrink-0 flex-col gap-3 rounded-[8px] px-4 py-3.5 text-[14px] leading-[1.5] sm:mt-8 sm:px-5 sm:py-5 sm:text-[16px] ${businessOpen ? 'bg-[#eaf1eb] text-[#304b35]' : 'bg-[#f3e9e8] text-[#75413e]'}`}>
+                <div className="flex items-center gap-4">
+                  <FaClock aria-hidden="true" className={`shrink-0 text-[22px] ${businessOpen ? 'text-[#55765b]' : 'text-[#a26762]'}`} />
+                  <p>Mon - Fri: 9AM - 5PM<br />Sat - Sun: Closed</p>
+                </div>
+                <span className={`w-full text-center text-[11px] font-semibold tracking-[0.04em] sm:text-xs ${businessOpen ? 'text-[#55765b]' : 'text-[#a26762]'}`} aria-live="polite">
+                  {businessOpen ? 'OPEN NOW' : 'CLOSED NOW'}
+                </span>
+              </div>
+
+            </motion.section>
           </motion.div>
         ) : null}
       </AnimatePresence>
