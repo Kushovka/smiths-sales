@@ -136,13 +136,32 @@ export const Header = () => {
               <span>{displayPhone}</span>
             </a>
             <i className="h-8 w-px bg-white/30" />
-            <div className="flex items-center gap-3 whitespace-nowrap px-6 text-white/90">
-              <FaClock className="text-[16px]" aria-hidden="true" />
-              <span>Mon - Fri: 9AM - 5PM <span className="px-2 text-white/50">|</span> Sat - Sun: Closed <span className="px-2 text-white/50">|</span></span>
-              <span className="inline-flex items-center gap-2 font-semibold uppercase tracking-[0.04em]" aria-live="polite">
-                <span className={`h-2 w-2 rounded-full ${businessOpen ? 'bg-emerald-400 shadow-[0_0_9px_rgba(52,211,153,0.9)]' : 'bg-red-500 shadow-[0_0_9px_rgba(239,68,68,0.9)]'}`} aria-hidden="true" />
-                {businessOpen ? 'Open Now' : 'Closed Now'}
+            <div className="group relative flex items-center whitespace-nowrap px-6 text-white/90">
+              <span tabIndex={0} aria-describedby="topbar-business-hours" className="inline-flex cursor-help items-center gap-3 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]">
+                <FaClock className="text-[16px]" aria-hidden="true" />
+                <span>Mon - Fri: 9AM - 5PM <span className="px-2 text-white/50">|</span> Sat - Sun: Closed <span className="px-2 text-white/50">|</span></span>
+                <span className="inline-flex items-center gap-2 font-semibold uppercase tracking-[0.04em]" aria-live="polite">
+                  <span className={`h-2 w-2 rounded-full ${businessOpen ? 'bg-emerald-400 shadow-[0_0_9px_rgba(52,211,153,0.9)]' : 'bg-red-500 shadow-[0_0_9px_rgba(239,68,68,0.9)]'}`} aria-hidden="true" />
+                  {businessOpen ? 'Open Now' : 'Closed Now'}
+                </span>
               </span>
+              <div id="topbar-business-hours" role="tooltip" className="pointer-events-none invisible absolute left-6 top-full z-[60] w-[320px] translate-y-1 border border-white/10 bg-[#1b201c] p-4 text-white opacity-0 shadow-[0_18px_38px_rgba(0,0,0,0.36)] transition duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                <div className="mb-3 flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <FaClock className="text-[15px] text-[var(--color-accent)]" aria-hidden="true" />
+                    <h2 className="text-[13px] font-bold">Business hours</h2>
+                  </div>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-white/45">Eastern Time</span>
+                </div>
+                <dl className="space-y-2 text-[12px] leading-5">
+                  {business.hoursList.map(([day, hours], index) => (
+                    <div key={day} className={`flex items-center justify-between gap-4 ${index === 5 ? 'mt-3 border-t border-white/10 pt-3' : ''}`}>
+                      <dt className="text-white/65">{day}</dt>
+                      <dd className="font-semibold tabular-nums text-white">{hours}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </div>
           </div>
           <p className="ml-6 whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.025em] text-white/90">Quality pre-owned vehicles <span className="px-2 text-white/50">|</span> Local &amp; Nationwide</p>
