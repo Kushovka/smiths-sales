@@ -18,7 +18,7 @@ from app.services.vehicle_service import (
 
 router = APIRouter(prefix="/vehicles", tags=["vehicles"])
 MEDIA_ROOT = Path("app/static/media").resolve()
-PLACEHOLDER_IMAGES = ["/images/vehicle-photo-coming-soon.png"] * 5
+PLACEHOLDER_IMAGES = ["/images/vehicle-photo-coming-soon.webp"] * 5
 
 
 def resolved_media_path(path: str) -> str | None:

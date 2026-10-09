@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router";
 import { FaArrowLeft, FaArrowRight, FaCarSide, FaClock, FaCog, FaMapMarkerAlt, FaPhoneAlt, FaRoad, FaShieldAlt, FaTag, FaWrench } from "react-icons/fa";
-import { listVehicles } from "../api/vehicles";
+import { listVehicles, resolveImageUrl } from "../api/vehicles";
 import { Button } from "../components/Button";
 import { ReviewCarousel } from "../components/ReviewCarousel";
 import { Seo } from "../components/Seo";
@@ -11,9 +11,27 @@ import type { Vehicle } from "../types/vehicle";
 import { formatNumber, formatPrice } from "../utils/format";
 import { autoDealerSchema } from "../utils/schema";
 
+const FEATURED_CUTOUTS: Record<string, string> = {
+  "2018-porsche-718-cayman-gts": "/media/vehicles/2018-porsche-718-cayman-gts/cutout.webp",
+  "2018-toyota-land-cruiser-urj200": "/media/vehicles/2018-toyota-land-cruiser-urj200/cutout.webp",
+  "2020-cadillac-escalade-esv-platinum-4wd": "/media/vehicles/2020-cadillac-escalade-esv-platinum-4wd/cutout.webp",
+  "2021-ford-f-150-shelby-raptor-baja-supercrew": "/media/vehicles/2021-ford-f-150-shelby-raptor-baja-supercrew/cutout.webp",
+  "2022-bmw-m5-competition-package": "/media/vehicles/2022-bmw-m5-competition-package/cutout.webp",
+  "2022-cadillac-ct5-v-blackwing-6-speed": "/media/vehicles/2022-cadillac-ct5-v-blackwing-6-speed/cutout.webp",
+  "2022-tesla-model-s-plaid": "/media/vehicles/2022-tesla-model-s-plaid/cutout.webp",
+  "2023-bmw-x6-m50i": "/media/vehicles/2023-bmw-x6-m50i/cutout.webp",
+  "2023-cadillac-escalade-v-esv": "/media/vehicles/2023-cadillac-escalade-v-esv/cutout.webp",
+  "2023-porsche-cayenne-platinum-edition": "/media/vehicles/2023-porsche-cayenne-platinum-edition/cutout.webp",
+  "2024-chevrolet-corvette-stingray-convertible-z51-2lt": "/media/vehicles/2024-chevrolet-corvette-stingray-convertible-z51-2lt/cutout.webp",
+  "2024-ford-f-250-super-duty-black-widow": "/media/vehicles/2024-ford-f-250-super-duty-black-widow/cutout.webp",
+  "2024-mercedes-amg-g63": "/media/vehicles/2024-mercedes-amg-g63/cutout.webp",
+  "2024-toyota-4runner-trd-off-road-premium-4x4": "/media/vehicles/2024-toyota-4runner-trd-off-road-premium-4x4/cutout.webp",
+  "2025-gmc-sierra-1500-pro-4x4": "/media/vehicles/2025-gmc-sierra-1500-pro-4x4/cutout.webp",
+};
+
 const FeaturedVehicleShowcase = ({ vehicle }: { vehicle: Vehicle }) => {
   const title = `${vehicle.year} ${vehicle.make} ${vehicle.model}`;
-  const image = vehicle.images[0];
+  const image = resolveImageUrl(FEATURED_CUTOUTS[vehicle.slug] || vehicle.images[0]);
   return (
     <article className="home-inventory-card group">
       <Link

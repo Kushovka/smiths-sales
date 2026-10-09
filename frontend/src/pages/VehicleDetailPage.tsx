@@ -24,6 +24,13 @@ const featuresFromListingInfo = (content: string) => content
   .map((line) => line.slice(2).trim())
   .filter((item) => !/^(chassis:|vin:|\d+[\d,.]*k? miles$|.*\b(engine|transmission|dual-clutch|tiptronic|single-speed|v8|v6|v12|inline|turbodiesel|twin-turbocharged|supercharged)\b|.*\b(paint|metallic|upholstery|interior|leather)\b)/i.test(item))
 
+const detailsFromListingInfo = (content: string) => content
+  .split('\n')
+  .map((line) => line.trim())
+  .filter((line) => line.startsWith('- '))
+  .map((line) => line.slice(2).trim())
+  .filter((item) => item && !/^(chassis:|vin:)/i.test(item))
+
 const Feature = ({ feature }: { feature: string }) => (
   <p className="flex items-start gap-3 text-[13px] leading-5 text-[var(--color-text)]"><span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[var(--color-button)] text-[9px] text-white"><FaCheck /></span>{feature}</p>
 )
@@ -99,12 +106,13 @@ const VehicleQuickFacts = ({ vehicle }: { vehicle: Vehicle }) => {
     { label: 'Exterior color', value: vehicle.exteriorColor, icon: FaTint },
     { label: 'Interior color', value: vehicle.interiorColor, icon: FaChair },
   ].filter((fact) => hasListingValue(fact.value))
-  return <dl className="grid grid-cols-2 bg-[var(--color-primary)] px-5 text-white sm:grid-cols-3 lg:grid-cols-7 lg:px-8">{facts.map(({ label, value, icon: Icon }, index) => <div key={label} className={`flex min-h-[78px] items-center justify-center gap-3 py-3 ${index > 0 ? 'border-l border-white/25 pl-3 sm:pl-5 lg:pl-6' : ''}`}><Icon className="shrink-0 text-xl text-white" /><div className="min-w-0"><dd className="text-[12px] font-semibold leading-[1.2] sm:text-[13px]">{value}</dd><dt className="mt-0.5 text-[10px] text-white/75">{label}</dt></div></div>)}</dl>
+  return <dl className="grid grid-cols-2 bg-[var(--color-primary)] px-5 text-white sm:grid-cols-3 lg:grid-cols-7 lg:px-8">{facts.map(({ label, value, icon: Icon }, index) => <div key={label} className={`flex min-h-[78px] flex-col items-center justify-center gap-1 py-3 text-center ${index > 0 ? 'border-l border-white/25 pl-3 sm:pl-5 lg:pl-6' : ''}`}><Icon className="shrink-0 text-xl text-white" /><div className="min-w-0 text-center"><dd className="text-center text-[12px] font-semibold leading-[1.2] sm:text-[13px]">{value}</dd><dt className="mt-0.5 text-center text-[10px] text-white/75">{label}</dt></div></div>)}</dl>
 }
 
 export const VehicleDetailPage = () => {
   const { slug } = useParams()
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
+  const [listingDetails, setListingDetails] = useState<string[]>([])
   const [recommendations, setRecommendations] = useState<Vehicle[]>([])
   const [loaded, setLoaded] = useState(false)
   const [loadError, setLoadError] = useState(false)
@@ -124,6 +132,7 @@ export const VehicleDetailPage = () => {
         ])
         if (!cancelled) {
           const sourceFeatures = featuresFromListingInfo(listingInfo)
+          setListingDetails(detailsFromListingInfo(listingInfo))
           setVehicle({
             ...item,
             description: listingDescription.trim() || item.description,
@@ -170,6 +179,7 @@ export const VehicleDetailPage = () => {
       <div className="min-w-0">
         {detailView === 'photos' ? <section id="photos" className="scroll-mt-24"><h2 className="text-[32px] font-bold leading-none tracking-[-0.02em] text-[var(--color-primary)] sm:text-[36px]">Photos</h2><div id="vehicle-photos-grid" className="mt-4" /></section> : <article id="overview" className="scroll-mt-24"><h2 className="text-[32px] font-bold leading-none tracking-[-0.02em] text-[var(--color-primary)] sm:text-[36px]">Vehicle overview</h2><p id="description" className="mt-3 whitespace-pre-line text-[14px] leading-[1.55] text-[var(--color-muted)]">{vehicle.description}</p></article>}
         <section id="specifications" className="mt-7 scroll-mt-24 border-t border-[var(--color-divider)] pt-3"><h2 className="text-[24px] font-bold leading-none text-[var(--color-primary)]">Specifications</h2><dl className="mt-3 grid grid-cols-1 gap-x-7 sm:grid-cols-2">{specs.map(([label, value]) => <div key={label} className="grid grid-cols-[minmax(95px,.7fr)_minmax(0,1.3fr)] gap-3 border border-[var(--color-divider)] bg-[var(--color-surface)] px-3 py-1.5 text-[11px] leading-4 even:bg-transparent"><dt className="text-[var(--color-text)]">{label}</dt><dd className="min-w-0 truncate text-[var(--color-muted)]">{value}</dd></div>)}</dl></section>
+        {listingDetails.length ? <section id="listing-details" className="mt-7 scroll-mt-24 border-t border-[var(--color-divider)] pt-3"><h2 className="text-[24px] font-bold leading-none text-[var(--color-primary)]">Listing details</h2><ul className="mt-3 grid grid-cols-1 gap-x-7 sm:grid-cols-2">{listingDetails.map((detail, index) => <li key={`${index}-${detail}`} className="border-b border-[var(--color-divider)] px-1 py-2 text-[13px] leading-5 text-[var(--color-muted)]">{detail}</li>)}</ul></section> : null}
       </div>
       <aside className="min-w-0">
         <section id="features" className="scroll-mt-24"><h2 className="border-b border-[var(--color-divider)] pb-2 text-[28px] font-bold leading-none text-[var(--color-primary)]">Key features</h2><div className="mt-3 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">{vehicle.features.map((feature) => <Feature key={feature} feature={feature} />)}</div></section>

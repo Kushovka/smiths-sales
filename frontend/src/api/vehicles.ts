@@ -109,10 +109,10 @@ const apiOrigin = (() => {
   }
 })()
 
-const placeholderVehicleImage = '/images/vehicle-photo-coming-soon.png'
+const placeholderVehicleImage = '/images/vehicle-photo-coming-soon.webp'
 const placeholderGalleryImages = Array.from({ length: 5 }, () => placeholderVehicleImage)
 
-const resolveImageUrl = (image: string) => {
+export const resolveImageUrl = (image: string) => {
   if (image.startsWith('/media/')) {
     return `${apiOrigin}${image}`
   }

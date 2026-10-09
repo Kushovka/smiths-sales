@@ -227,7 +227,7 @@ export const Header = () => {
       <AnimatePresence>
         {open ? (
           <motion.div
-            className="mobile-menu-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-[#090909]/90 p-2.5 xl:hidden sm:p-4"
+            className="mobile-menu-backdrop fixed inset-0 z-[100] flex items-center justify-center bg-[#090909]/90 p-2.5 2xl:hidden sm:p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
