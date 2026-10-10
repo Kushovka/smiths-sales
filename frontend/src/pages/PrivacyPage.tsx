@@ -18,7 +18,7 @@ export const PrivacyPage = () => (
       <SectionHeading eyebrow="Privacy" title="Privacy Policy" text="How Smith's Sales & Services handles website inquiries, cookies, and customer communication." />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="surface-card rounded-md p-6">
-          <p className="eyebrow">Last updated: June 24, 2026</p>
+          <p className="eyebrow">Last updated: October 8, 2026</p>
           <div className="mt-6 grid gap-6">
             {sections.map(([title, text]) => (
               <div key={title} className="border-t border-[var(--color-border)] pt-5 first:border-t-0 first:pt-0">

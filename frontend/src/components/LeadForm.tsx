@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo, useState, type ReactNode } from 'react'
-import { FaArrowRight, FaBan, FaCreditCard } from 'react-icons/fa'
+import { FaArrowRight } from 'react-icons/fa'
+import { FiInfo } from 'react-icons/fi'
 import { createLead } from '../api/leads'
 import { trackingConfig } from '../config/tracking'
 import { createMetaEventId, getCookieValue, splitName, trackLead } from '../utils/metaPixel'
@@ -152,8 +153,8 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
     >
       {variant === 'default' ? <><p className="eyebrow">Quick request</p><h3 className="mt-2 text-2xl font-normal text-[var(--color-text)]">{title}</h3>{vehicleName ? <p className="mt-1 text-sm font-normal text-[var(--color-muted)]">{vehicleName}</p> : null}</> : null}
       <aside className="financing-notice" aria-label="Financing information">
-        <span className="financing-notice-icon" aria-hidden="true"><FaCreditCard /><FaBan /></span>
-        <div className="financing-notice-copy"><strong>No financing available.</strong><span className="financing-notice-divider" aria-hidden="true" /><span>We do not offer in-house financing.</span></div>
+        <div className="financing-notice-heading"><FiInfo aria-hidden="true" /><strong>Financing Is Not Available</strong></div>
+        <p className="financing-notice-copy">We do not offer financing at our dealership.</p>
       </aside>
       <div className={`${variant === 'vehicle' ? '' : 'mt-5'} grid gap-2.5 sm:grid-cols-2`}>
         <div className="hidden" aria-hidden="true">

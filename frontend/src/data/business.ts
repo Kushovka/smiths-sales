@@ -9,8 +9,8 @@ export const business = {
   shortLocation: 'Commodore, PA',
   latitude: 40.7047719,
   longitude: -78.9810529,
-  mapsUrl: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z',
-  reviewsUrl: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z',
+  mapsUrl: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z/data=!3m1!4b1!4m6!3m5!1s0x89cb6108605cbde5:0x529d4b9577716318!8m2!3d40.7047719!4d-78.9810529!16s%2Fg%2F1tdb0nzw?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D',
+  reviewsUrl: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z/data=!3m1!4b1!4m6!3m5!1s0x89cb6108605cbde5:0x529d4b9577716318!8m2!3d40.7047719!4d-78.9810529!16s%2Fg%2F1tdb0nzw?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D',
   mapEmbedUrl: 'https://maps.google.com/maps?q=Smith%27s%20Sales%20%26%20Services%2C%2012018%20PA-286%2C%20Commodore%2C%20PA%2015729&z=16&t=k&output=embed',
   streetViewImage: 'https://streetviewpixels-pa.googleapis.com/v1/thumbnail?cb_client=maps_sv.tactile&w=900&h=600&pitch=-1.0523713313948662&panoid=buRJfctmV1edfckdlr2evg&yaw=175.050688719162',
   heroImage: 'https://streetviewpixels-pa.googleapis.com/v1/thumbnail?cb_client=maps_sv.tactile&w=1600&h=900&pitch=-1.0523713313948662&panoid=buRJfctmV1edfckdlr2evg&yaw=175.050688719162',
@@ -28,5 +28,5 @@ export const business = {
   serviceArea: 'Commodore, Pennsylvania',
   website: '',
   email: '',
-  contactHref: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z',
+  contactHref: 'https://www.google.com/maps/place/Smith%27s+Sales+%26+Services/@40.7047719,-78.9810529,17z/data=!3m1!4b1!4m6!3m5!1s0x89cb6108605cbde5:0x529d4b9577716318!8m2!3d40.7047719!4d-78.9810529!16s%2Fg%2F1tdb0nzw?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D',
 }
