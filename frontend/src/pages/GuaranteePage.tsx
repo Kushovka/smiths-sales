@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   FaArrowRight,
   FaCalendarAlt,
@@ -10,8 +11,10 @@ import {
   FaTruck,
 } from 'react-icons/fa'
 import { Link } from 'react-router'
+import { LeadFormDialog } from '../components/LeadFormDialog'
 import { Seo } from '../components/Seo'
 import { business } from '../data/business'
+import { trackContactCta } from '../utils/ctaTracking'
 
 const returnHighlights = [
   { icon: FaCalendarAlt, title: '72-Hour Return Period', text: 'The return period begins when the delivery paperwork is signed and the vehicle is received.' },
@@ -45,7 +48,10 @@ const keyPoints = [
   [FaDollarSign, 'Upfront pricing with no hidden fees'],
 ] as const
 
-export const GuaranteePage = () => (
+export const GuaranteePage = () => {
+  const [inquiryOpen, setInquiryOpen] = useState(false)
+
+  return <>
   <div className="guarantee-page">
     <Seo title="72-Hour / 250-Mile Money-Back Guarantee" description={`Review the return policy, process, and conditions for qualifying vehicles at ${business.name}. Written purchase and return documents control eligibility.`} />
 
@@ -91,7 +97,7 @@ export const GuaranteePage = () => (
     <section className="guarantee-commitment">
       <div className="guarantee-commitment-inner">
         <div><h2>A Better Car Buying Experience<br />for Our Customers</h2><p>We’re a locally owned dealership in Commodore, PA. Our goal is simple: honest vehicles, clear information, and a fair buying experience. If you have questions about our money-back guarantee, our team is here to help.</p></div>
-        <div className="guarantee-commitment-actions"><Link className="guarantee-button guarantee-button--red" to="/inventory">Shop Our Inventory <FaArrowRight aria-hidden="true" /></Link><Link className="guarantee-button guarantee-button--outline" to="/contact"><FaFileAlt aria-hidden="true" /> Ask a Question <FaArrowRight aria-hidden="true" /></Link></div>
+        <div className="guarantee-commitment-actions"><Link className="guarantee-button guarantee-button--red" to="/inventory">Shop Our Inventory <FaArrowRight aria-hidden="true" /></Link><button type="button" className="guarantee-button guarantee-button--outline" onClick={() => { trackContactCta('contact_form_click', 'Guarantee Ask a Question'); setInquiryOpen(true) }}><FaFileAlt aria-hidden="true" /> Ask a Question <FaArrowRight aria-hidden="true" /></button></div>
       </div>
     </section>
 
@@ -110,4 +116,6 @@ export const GuaranteePage = () => (
     </section>
 
   </div>
-)
+  <LeadFormDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} dialogTitle="Ask a Question" formProps={{ title: 'Ask a Question', variant: 'default', markRequiredNameFields: true, singleNameField: true, phonePlaceholder: 'Phone number*', inquiryOptions: ['Vehicle questions', 'Warranty & returns', 'Delivery inquiries', 'Schedule a visit', 'Other'] }} />
+  </>
+}

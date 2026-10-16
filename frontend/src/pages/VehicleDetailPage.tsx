@@ -5,6 +5,7 @@ import { FaArrowLeft, FaArrowRight, FaCarSide, FaCheck, FaChair, FaChevronLeft, 
 import { getVehicle, listVehicles } from '../api/vehicles'
 import { Button } from '../components/Button'
 import { LeadForm } from '../components/LeadForm'
+import { LeadFormDialog } from '../components/LeadFormDialog'
 import { Seo } from '../components/Seo'
 import { VehicleDetailSkeleton } from '../components/Skeletons'
 import { VehicleGallery } from '../components/VehicleGallery'
@@ -86,13 +87,13 @@ const RelatedVehiclesCarousel = ({ vehicles }: { vehicles: Vehicle[] }) => {
   </section>
 }
 
-const PriceCard = ({ vehicle }: { vehicle: Vehicle }) => <aside className="flex flex-col bg-[var(--color-background)] px-5 py-4 sm:px-7 sm:py-5 lg:px-8 lg:py-5">
+const PriceCard = ({ vehicle, onRequestInfo }: { vehicle: Vehicle; onRequestInfo: () => void }) => <aside className="flex flex-col bg-[var(--color-background)] px-5 py-4 sm:px-7 sm:py-5 lg:px-8 lg:py-5">
   <Link to="/inventory" className="mb-4 inline-flex min-h-8 w-fit items-center gap-2 text-[14px] font-bold text-[var(--color-muted)] transition hover:text-[var(--color-accent)]"><FaArrowLeft aria-hidden="true" className="text-base text-[var(--color-button)]" /> Back to inventory</Link>
   <h1 className="text-[32px] font-bold uppercase leading-[.91] tracking-[-0.025em] text-[var(--color-primary)] sm:text-[38px] lg:text-[42px]">{vehicle.year} {vehicle.make}<br />{vehicle.model} {vehicle.trim}</h1>
   <p className="mt-2 text-[12px] leading-5 text-[var(--color-muted)]">{vehicle.engine} <span className="px-1 text-[var(--color-border)]">|</span> {vehicle.drivetrain} <span className="px-1 text-[var(--color-border)]">|</span> {vehicle.transmission}</p>
   <div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p className="text-[46px] font-bold leading-none tracking-[-0.025em] text-[var(--color-accent)] sm:text-[54px]">{formatPrice(vehicle.price)}</p>{vehicle.stockNumber || hasListingValue(vehicle.vin) ? <div className="border-l border-[var(--color-divider)] pl-3 text-[10px] leading-5 text-[var(--color-text)]">{vehicle.stockNumber ? <p>Stock&nbsp; #{vehicle.stockNumber}</p> : null}{hasListingValue(vehicle.vin) ? <p className="max-w-[180px] truncate" title={vehicle.vin}>VIN&nbsp; {vehicle.vin}</p> : null}</div> : null}</div>
   <a href={phoneHref} className="site-button mt-4 flex min-h-[56px] items-center justify-center gap-3 bg-[var(--color-button)] px-4 text-[16px] font-bold text-white transition hover:bg-[var(--color-button-hover)]" onClick={() => trackContactCta('phone_click', 'Vehicle Price Card Phone')}><FaPhoneAlt aria-hidden="true" className="text-lg" /> Call&nbsp; {business.phone} <FaArrowRight aria-hidden="true" className="text-lg" /></a>
-  <div className="mt-1.5 grid grid-cols-1"><a href="#request-info" className="site-button flex min-h-[50px] items-center justify-center gap-2 border border-[var(--color-border)] bg-transparent text-[14px] font-bold text-[var(--color-text)] transition hover:bg-[var(--color-hover)]" onClick={() => trackContactCta('contact_form_click', 'Vehicle Price Card Request Info')}><FaEnvelope className="text-base" /> Request Info</a></div>
+  <div className="mt-1.5 grid grid-cols-1"><button type="button" className="site-button flex min-h-[50px] items-center justify-center gap-2 border border-[var(--color-border)] bg-transparent text-[14px] font-bold text-[var(--color-text)] transition hover:bg-[var(--color-hover)]" onClick={() => { trackContactCta('contact_form_click', 'Vehicle Price Card Request Info'); onRequestInfo() }}><FaEnvelope aria-hidden="true" className="text-base" /> Request Info</button></div>
   <div className="mt-3 grid grid-cols-2 divide-x divide-[var(--color-divider)] border border-[var(--color-divider)] bg-[var(--color-surface)] py-2.5"><a href={business.mapsUrl} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2.5 px-3 text-[13px] font-semibold text-[var(--color-text)]"><FaMapMarkerAlt className="shrink-0 text-lg" /><span>{business.shortLocation}<small className="mt-0.5 block text-[11px] font-medium text-[var(--color-muted)]">View on Map →</small></span></a><div className="flex items-center justify-center gap-2.5 px-3 text-[12px] font-medium leading-4 text-[var(--color-muted)]"><FaClock className="shrink-0 text-lg text-[var(--color-text)]" /><span>Monday to Friday: 9AM to 5PM<br />Saturday and Sunday: Closed</span></div></div>
 </aside>
 
@@ -106,16 +107,21 @@ const VehicleQuickFacts = ({ vehicle }: { vehicle: Vehicle }) => {
     { label: 'Exterior color', value: vehicle.exteriorColor, icon: FaTint },
     { label: 'Interior color', value: vehicle.interiorColor, icon: FaChair },
   ].filter((fact) => hasListingValue(fact.value))
-  return <dl className="grid grid-cols-2 bg-[var(--color-primary)] px-5 text-white sm:grid-cols-3 lg:grid-cols-7 lg:px-8">{facts.map(({ label, value, icon: Icon }, index) => <div key={label} className={`flex min-h-[78px] flex-col items-center justify-center gap-1 py-3 text-center ${index > 0 ? 'border-l border-white/25 pl-3 sm:pl-5 lg:pl-6' : ''}`}><Icon className="shrink-0 text-xl text-white" /><div className="min-w-0 text-center"><dd className="text-center text-[12px] font-semibold leading-[1.2] sm:text-[13px]">{value}</dd><dt className="mt-0.5 text-center text-[10px] text-white/75">{label}</dt></div></div>)}</dl>
+  return <dl className="grid grid-cols-2 gap-px bg-white/25 px-5 text-white sm:grid-cols-3 lg:grid-cols-7 lg:px-8">{facts.map(({ label, value, icon: Icon }) => <div key={label} className="flex min-h-[78px] min-w-0 flex-col items-center justify-center gap-1 bg-[var(--color-primary)] px-2 py-3 text-center"><Icon className="shrink-0 text-xl text-white" /><div className="min-w-0 max-w-full text-center"><dd className="break-words text-center text-[12px] font-semibold leading-[1.2] sm:text-[13px]">{value}</dd><dt className="mt-0.5 text-center text-[10px] text-white/75">{label}</dt></div></div>)}</dl>
 }
 
 export const VehicleDetailPage = () => {
   const { slug } = useParams()
+  const [inquiryOpen, setInquiryOpen] = useState(false)
   const [vehicle, setVehicle] = useState<Vehicle | null>(null)
   const [listingDetails, setListingDetails] = useState<string[]>([])
   const [recommendations, setRecommendations] = useState<Vehicle[]>([])
   const [loaded, setLoaded] = useState(false)
   const [loadError, setLoadError] = useState(false)
+  const openInquiry = () => {
+    setInquiryOpen(true)
+  }
+  const closeInquiry = () => setInquiryOpen(false)
   const [detailView, setDetailView] = useState<'overview' | 'photos'>(() => window.location.hash === '#photos' ? 'photos' : 'overview')
   const showPhotos = () => {
     setDetailView('photos')
@@ -166,10 +172,26 @@ export const VehicleDetailPage = () => {
   if (!vehicle && loaded && loadError) return <section className="section soft-band"><div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8"><div className="surface-card p-8"><h1 className="text-3xl text-[var(--color-text)]">Vehicle details are temporarily unavailable</h1><p className="mt-3 text-[var(--color-muted)]">Please try again later or call us for current vehicle information.</p><div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><Button href="/inventory" variant="secondary">Back to Inventory</Button><Button href={phoneHref}><FaPhoneAlt /> Contact</Button></div></div></div></section>
   if (!vehicle) return <VehicleDetailSkeleton />
   const specs = [['Year', String(vehicle.year)], ['Make', vehicle.make], ['Model', vehicle.model], ['Body type', vehicle.bodyType], ['Engine', vehicle.engine], ['Transmission', vehicle.transmission], ['Drivetrain', vehicle.drivetrain], ['Mileage', `${formatNumber(vehicle.mileage)} mi`], ['Exterior color', vehicle.exteriorColor], ['Interior color', vehicle.interiorColor]].filter(([, value]) => hasListingValue(value))
-  return <><Seo title={title} description={`${title} for sale at Smith's Sales & Services in Commodore, PA. Call or request info today.`} noIndex schema={{ '@context': 'https://schema.org', '@type': 'Vehicle', name: title, brand: vehicle.make, model: vehicle.model, vehicleModelDate: vehicle.year, mileageFromOdometer: `${vehicle.mileage} MI`, ...(vehicle.price > 0 ? { offers: { '@type': 'Offer', price: vehicle.price, priceCurrency: 'USD' } } : {}) }} /><main className="bg-[var(--color-background)]">
+  const vehicleDescription = vehicle.description || `${title} for sale at Smith's Sales & Services in Commodore, PA. Call or request information today.`
+  const vehicleUrl = `https://smithssales.net/inventory/${vehicle.slug}`
+  const vehicleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Vehicle',
+    name: title,
+    url: vehicleUrl,
+    image: vehicle.images,
+    description: vehicleDescription,
+    brand: { '@type': 'Brand', name: vehicle.make },
+    model: vehicle.model,
+    vehicleModelDate: String(vehicle.year),
+    vehicleConfiguration: vehicle.trim,
+    mileageFromOdometer: { '@type': 'QuantitativeValue', value: vehicle.mileage, unitCode: 'SMI' },
+    ...(vehicle.price > 0 ? { offers: { '@type': 'Offer', url: vehicleUrl, price: vehicle.price, priceCurrency: 'USD', availability: vehicle.status?.toLowerCase() === 'sold' ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock', seller: { '@id': 'https://smithssales.net/#dealership' } } } : {}),
+  }
+  return <><Seo title={title} description={vehicleDescription} image={vehicle.images[0]} openGraphType="product" schema={vehicleSchema} /><main className="bg-[var(--color-background)]">
     <section className="grid gap-0 py-5 sm:py-6 lg:grid-cols-[minmax(0,2fr)_minmax(380px,1fr)] lg:py-8">
       <div id="vehicle-gallery" className="relative px-4 sm:px-5 lg:min-h-[430px] lg:px-0"><VehicleGallery images={vehicle.images} imagesTotal={vehicle.imagesTotal} slug={vehicle.slug} title={title} onShowPhotos={showPhotos} showAllPhotos={detailView === 'photos'} /></div>
-      <PriceCard vehicle={vehicle} />
+      <PriceCard vehicle={vehicle} onRequestInfo={openInquiry} />
     </section>
     <VehicleQuickFacts vehicle={vehicle} />
     <section className="px-5 py-5 sm:px-7 lg:px-9 lg:py-6"><div className="mx-auto grid max-w-[1800px] gap-7 lg:grid-cols-[170px_minmax(0,1.15fr)_minmax(360px,.95fr)] lg:gap-8">
@@ -178,7 +200,7 @@ export const VehicleDetailPage = () => {
       </nav>
       <div className="min-w-0">
         {detailView === 'photos' ? <section id="photos" className="scroll-mt-24"><h2 className="text-[32px] font-bold leading-none tracking-[-0.02em] text-[var(--color-primary)] sm:text-[36px]">Photos</h2><div id="vehicle-photos-grid" className="mt-4" /></section> : <article id="overview" className="scroll-mt-24"><h2 className="text-[32px] font-bold leading-none tracking-[-0.02em] text-[var(--color-primary)] sm:text-[36px]">Vehicle overview</h2><p id="description" className="mt-3 whitespace-pre-line text-[14px] leading-[1.55] text-[var(--color-muted)]">{vehicle.description}</p></article>}
-        <section id="specifications" className="mt-7 scroll-mt-24 border-t border-[var(--color-divider)] pt-3"><h2 className="text-[24px] font-bold leading-none text-[var(--color-primary)]">Specifications</h2><dl className="mt-3 grid grid-cols-1 gap-x-7 sm:grid-cols-2">{specs.map(([label, value]) => <div key={label} className="grid grid-cols-[minmax(95px,.7fr)_minmax(0,1.3fr)] gap-3 border border-[var(--color-divider)] bg-[var(--color-surface)] px-3 py-1.5 text-[11px] leading-4 even:bg-transparent"><dt className="text-[var(--color-text)]">{label}</dt><dd className="min-w-0 truncate text-[var(--color-muted)]">{value}</dd></div>)}</dl></section>
+        <section id="specifications" className="mt-7 scroll-mt-24 border-t border-[var(--color-divider)] pt-3"><h2 className="text-[24px] font-bold leading-none text-[var(--color-primary)]">Specifications</h2><dl className="mt-3 grid grid-cols-1 gap-x-7 sm:grid-cols-2">{specs.map(([label, value]) => <div key={label} className="grid grid-cols-[minmax(95px,.7fr)_minmax(0,1.3fr)] gap-3 border border-[var(--color-divider)] bg-[var(--color-surface)] px-3 py-1.5 text-[11px] leading-4 even:bg-transparent"><dt className="text-[var(--color-text)]">{label}</dt><dd className="min-w-0 break-words text-[var(--color-muted)]">{value}</dd></div>)}</dl></section>
         {listingDetails.length ? <section id="listing-details" className="mt-7 scroll-mt-24 border-t border-[var(--color-divider)] pt-3"><h2 className="text-[24px] font-bold leading-none text-[var(--color-primary)]">Listing details</h2><ul className="mt-3 grid grid-cols-1 gap-x-7 sm:grid-cols-2">{listingDetails.map((detail, index) => <li key={`${index}-${detail}`} className="border-b border-[var(--color-divider)] px-1 py-2 text-[13px] leading-5 text-[var(--color-muted)]">{detail}</li>)}</ul></section> : null}
       </div>
       <aside className="min-w-0">
@@ -191,5 +213,5 @@ export const VehicleDetailPage = () => {
       </aside>
     </div></section>
     <RelatedVehiclesCarousel vehicles={recommendations} />
-  </main><div className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--color-border)] bg-[var(--color-background)] px-4 py-3 shadow-sm lg:hidden"><div className="mx-auto flex max-w-7xl items-center gap-3"><div className="min-w-0 flex-1"><p className="truncate text-sm text-[var(--color-text)]">{title}</p><p className="font-medium text-[var(--color-primary)]">{formatPrice(vehicle.price)}</p></div><a href={phoneHref} className="site-button inline-flex h-12 w-12 shrink-0 items-center justify-center bg-[var(--color-primary)] text-xl text-white" aria-label="Contact about this vehicle" onClick={() => trackContactCta('phone_click', 'Vehicle Sticky Contact')}><FaPhoneAlt /></a><a href="#request-info" className="site-button inline-flex h-12 w-12 shrink-0 items-center justify-center bg-[var(--color-button)] text-xl text-white" aria-label="Request info about this vehicle" onClick={() => trackContactCta('contact_form_click', 'Vehicle Sticky Request Info')}><FaArrowRight /></a></div></div></>
+  </main><LeadFormDialog open={inquiryOpen} onClose={closeInquiry} dialogTitle="Request information" subtitle={title} formProps={{ title: 'Send Inquiry', vehicleId: vehicle.id, vehicleName: title, vehicleValue: vehicle.price, variant: 'vehicle', className: 'vehicle-inquiry-form', messageDefaultValue: `I'm interested in the ${title}. Please contact me with more information.` }} /></>
 }

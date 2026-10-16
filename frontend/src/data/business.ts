@@ -1,8 +1,8 @@
 export const business = {
   name: "Smith's Sales & Services",
   legalNote: 'Used car sales and services',
-  phone: '+1 724-254-4868',
-  phoneHref: 'tel:+17242544868',
+  phone: '+1 724-707-6447',
+  phoneHref: 'tel:+17247076447',
   address: '12018 PA-286',
   cityState: 'Commodore, PA',
   postalCode: '15729',

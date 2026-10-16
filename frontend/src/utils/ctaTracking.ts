@@ -1,5 +1,5 @@
 import { sendContactAction } from '../api/events'
-import { createMetaEventId, getCookieValue, trackContactAction } from './metaPixel'
+import { createMetaEventId, getCookieValue, trackContactAction, trackLead } from './metaPixel'
 
 export const trackContactCta = (actionType: string, contentName?: string | null) => {
   if (typeof window === 'undefined') {
@@ -8,11 +8,20 @@ export const trackContactCta = (actionType: string, contentName?: string | null)
 
   const eventId = createMetaEventId(actionType)
 
-  trackContactAction({
-    eventId,
-    actionType,
-    contentName,
-  })
+  if (actionType === 'phone_click') {
+    trackLead({
+      eventId,
+      leadType: 'phone_call',
+      contentName: contentName ?? 'Phone CTA',
+      contentType: 'service',
+    })
+  } else {
+    trackContactAction({
+      eventId,
+      actionType,
+      contentName,
+    })
+  }
 
   void sendContactAction({
     actionType,

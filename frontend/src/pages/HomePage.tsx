@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router";
 import { FaArrowLeft, FaArrowRight, FaCarSide, FaClock, FaCog, FaMapMarkerAlt, FaPhoneAlt, FaRoad, FaShieldAlt, FaTag, FaWrench } from "react-icons/fa";
@@ -129,7 +129,7 @@ const HomeAboutSection = () => (
 );
 
 const FeaturedVehiclesSkeleton = () => (
-  <div className="home-inventory-grid" aria-label="Loading featured vehicles">
+  <div className="home-inventory-grid home-inventory-grid--loading" aria-label="Loading featured vehicles">
     {Array.from({ length: 4 }).map((_, index) => <div className="h-[220px] animate-pulse bg-[#e5e5e0]" key={index} />)}
   </div>
 );
@@ -141,6 +141,8 @@ export const HomePage = () => {
   const [isMobileFeatured, setIsMobileFeatured] = useState(() => window.matchMedia('(max-width: 640px)').matches);
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [featuredError, setFeaturedError] = useState(false);
+  const featuredSwipeStart = useRef<{ x: number; y: number; pointerId: number } | null>(null);
+  const suppressSwipeClick = useRef(false);
 
   useEffect(() => {
     const mobileQuery = window.matchMedia('(max-width: 640px)');
@@ -195,10 +197,36 @@ export const HomePage = () => {
     ? (featured.length ? activeFeaturedPage : 0)
     : Math.min(activeFeaturedPage * 4, Math.max(0, featured.length - 4));
   const visibleFeaturedVehicles = isMobileFeatured
-    ? Array.from({ length: Math.min(4, featured.length) }, (_, index) => featured[(featuredStart + index) % featured.length])
+    ? Array.from({ length: Math.min(1, featured.length) }, (_, index) => featured[(featuredStart + index) % featured.length])
     : featured.slice(featuredStart, featuredStart + 4);
   const changeFeaturedPage = (direction: -1 | 1) => {
     setFeaturedPage((current) => (current + direction + featuredPageCount) % featuredPageCount);
+  };
+  const handleFeaturedPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (!isMobileFeatured || event.pointerType !== 'touch') return;
+    featuredSwipeStart.current = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+  };
+  const handleFeaturedPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const start = featuredSwipeStart.current;
+    featuredSwipeStart.current = null;
+    if (!start || start.pointerId !== event.pointerId || event.pointerType !== 'touch') return;
+
+    const deltaX = event.clientX - start.x;
+    const deltaY = event.clientY - start.y;
+    if (Math.abs(deltaX) < 44 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.2) return;
+
+    suppressSwipeClick.current = true;
+    changeFeaturedPage(deltaX < 0 ? 1 : -1);
+    window.setTimeout(() => { suppressSwipeClick.current = false; }, 0);
+  };
+  const handleFeaturedPointerCancel = (event: PointerEvent<HTMLDivElement>) => {
+    if (featuredSwipeStart.current?.pointerId === event.pointerId) featuredSwipeStart.current = null;
+  };
+  const handleFeaturedClickCapture = (event: MouseEvent<HTMLDivElement>) => {
+    if (!suppressSwipeClick.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+    suppressSwipeClick.current = false;
   };
   return (
     <>
@@ -240,7 +268,13 @@ export const HomePage = () => {
           </div>
           <span className="home-inventory-carousel__count" aria-live="polite">{String(activeFeaturedPage + 1).padStart(2, "0")} <i /> {String(featuredPageCount).padStart(2, "0")}</span>
         </div>
-        <div className="home-inventory-carousel__content">
+        <div
+          className="home-inventory-carousel__content"
+          onPointerDown={handleFeaturedPointerDown}
+          onPointerUp={handleFeaturedPointerUp}
+          onPointerCancel={handleFeaturedPointerCancel}
+          onClickCapture={handleFeaturedClickCapture}
+        >
           {featuredLoading ? <FeaturedVehiclesSkeleton /> : featuredError ? (
             <div className="featured-vehicles-message">Inventory is temporarily unavailable. Please try again later or call us for current vehicles.</div>
           ) : visibleFeaturedVehicles.length ? (

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { FaArrowRight, FaCar, FaCheck, FaClock, FaDollarSign, FaFileAlt, FaPhoneAlt, FaShieldAlt, FaTruck } from 'react-icons/fa'
 import { Link } from 'react-router'
 import { LeadForm } from '../components/LeadForm'
+import { LeadFormDialog } from '../components/LeadFormDialog'
 import { Seo } from '../components/Seo'
 import { business } from '../data/business'
 import { trackContactCta } from '../utils/ctaTracking'
@@ -34,7 +35,12 @@ export const DeliveryPage = () => {
   const [quoteFormOpen, setQuoteFormOpen] = useState(false)
   const openQuoteForm = () => {
     setQuoteFormOpen(true)
-    window.setTimeout(() => document.getElementById('delivery-quote')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
+  }
+  const [quoteDialogOpen, setQuoteDialogOpen] = useState(false)
+  const requestQuote = (contentName: string) => {
+    trackContactCta('contact_form_click', contentName)
+    openQuoteForm()
+    setQuoteDialogOpen(true)
   }
 
   return <>
@@ -46,7 +52,7 @@ export const DeliveryPage = () => {
           <h2 className="delivery-hero-subtitle">Direct to Your Door</h2>
           <p className="delivery-hero-description">Have your vehicle delivered from Smith’s Sales &amp; Services in Commodore, PA directly to your home or preferred location. Contact us for a delivery quote and estimated timeframe.</p>
           <div className="delivery-actions">
-          <a className="delivery-button delivery-button--red" href="#delivery-quote" onClick={(event) => { event.preventDefault(); openQuoteForm() }}><FaTruck />Get a Delivery Quote<FaArrowRight /></a>
+          <button type="button" className="delivery-button delivery-button--red" onClick={() => requestQuote('Delivery Hero Quote')}><FaTruck aria-hidden="true" />Get a Delivery Quote<FaArrowRight aria-hidden="true" /></button>
             <Link className="delivery-button delivery-button--light" to="/inventory"><FaCar aria-hidden="true"/>Browse Our Inventory<FaArrowRight /></Link>
           </div>
         </div>
@@ -82,7 +88,7 @@ export const DeliveryPage = () => {
       <section className="delivery-quote-section">
         <div className="delivery-quote-panel">
           <div><h2>Get a Delivery Quote Today</h2><p>Contact us for a delivery quote and estimated timeframe for your location. Our team is here to help make the process easy.</p>
-            <div className="delivery-actions"><a className="delivery-button delivery-button--red" href="#delivery-quote" onClick={(event) => { event.preventDefault(); openQuoteForm() }}><FaTruck />Get a Delivery Quote<FaArrowRight /></a><a className="delivery-button delivery-button--dark" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Delivery Quote Call')}><FaPhoneAlt />Call {business.phone}</a></div>
+            <div className="delivery-actions"><button type="button" className="delivery-button delivery-button--red" onClick={() => requestQuote('Delivery Page Quote')}><FaTruck aria-hidden="true" />Get a Delivery Quote<FaArrowRight aria-hidden="true" /></button><a className="delivery-button delivery-button--dark" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Delivery Quote Call')}><FaPhoneAlt />Call {business.phone}</a></div>
           </div>
         </div>
       </section>
@@ -94,7 +100,8 @@ export const DeliveryPage = () => {
         </div>
       </section>
 
-      {quoteFormOpen ? <section className="delivery-form-area" id="delivery-quote"><LeadForm title="Get a Delivery Quote" messagePlaceholder="Destination city, state, ZIP code, and vehicle of interest" /></section> : null}
+      {quoteFormOpen ? <section className="delivery-form-area" id="delivery-quote"><LeadForm title="Get a Delivery Quote" messagePlaceholder="Destination city, state, ZIP code, and vehicle of interest" animateInView={false} /></section> : null}
     </main>
+    <LeadFormDialog open={quoteDialogOpen} onClose={() => setQuoteDialogOpen(false)} dialogTitle="Get a Delivery Quote" formProps={{ title: 'Get a Delivery Quote', messagePlaceholder: 'Destination city, state, ZIP code, and vehicle of interest' }} />
   </>
 }

@@ -118,10 +118,11 @@ def send_contact_action_event(payload: ContactActionCreate) -> None:
         "action_type": payload.action_type,
         "content_name": payload.content_name,
         "source_page": payload.source_page,
+        "lead_type": "phone_call" if payload.action_type == "phone_click" else None,
     })
 
     event = _clean({
-        "event_name": "Contact",
+        "event_name": "Lead" if payload.action_type == "phone_click" else "Contact",
         "event_time": int(datetime.now(timezone.utc).timestamp()),
         "event_source_url": payload.event_source_url,
         "action_source": "website",

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { FaArrowRight, FaChevronDown, FaChevronLeft, FaChevronRight, FaThLarge, FaList, FaSlidersH, FaSearch, FaTimes, FaTachometerAlt, FaRoad, FaCogs } from 'react-icons/fa'
 import { getVehicleFilters, listVehicles } from '../api/vehicles'
@@ -17,8 +17,11 @@ const queryNumber = (value: string | null) => {
   const parsed = Number(value)
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined
 }
-const selectClass = 'mt-1 h-10 w-full border border-white/15 bg-[#090909] px-3 text-[12px] text-[#fffdf8] outline-none transition focus:border-[var(--color-accent)]'
+const selectClass = 'h-10 w-full appearance-none border border-white/15 bg-[#090909] px-3 pr-10 text-[12px] text-[#fffdf8] outline-none transition focus:border-[var(--color-accent)]'
 const filterLabel = 'block text-[10px] font-bold uppercase tracking-[0.12em] text-white/70'
+const FilterSelect = ({ label, value, onChange, children, disabled = false }: { label: string; value: string; onChange: (value: string) => void; children: ReactNode; disabled?: boolean }) => (
+  <label className={filterLabel}>{label}<span className="relative mt-1 block"><select className={selectClass} value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)}>{children}</select><FaChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-white/70" /></span></label>
+)
 
 const InventoryVehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
   return <article className="inventory-vehicle-card group flex min-w-0 flex-col overflow-hidden rounded-[3px] border border-[var(--color-border)] bg-[var(--color-surface)] transition-colors duration-200 hover:border-[var(--color-primary)]">
@@ -139,13 +142,13 @@ export const InventoryPage = () => {
     <div className="hidden items-center gap-2 border-b border-white/15 pb-4 lg:flex"><FaSlidersH className="text-[var(--color-button)]" /><h2 className="text-[11px] font-bold uppercase tracking-[0.15em]">Filter inventory</h2></div>
     <div id="inventory-filters" className={`${filtersOpen ? 'block' : 'hidden'} lg:block`}>
     <div className="mt-5 space-y-4">
-      <label className={filterLabel}>Make<select className={selectClass} value={make} onChange={(event) => { filterChange(setMake, event.target.value); setModel('') }}><option value="">All makes</option>{makes.map((item) => <option key={item}>{item}</option>)}</select></label>
-      <label className={filterLabel}>Model<select className={selectClass} value={model} disabled={!make} onChange={(event) => filterChange(setModel, event.target.value)}><option value="">{make ? 'All models' : 'Select make'}</option>{models.map((item) => <option key={item}>{item}</option>)}</select></label>
-      <label className={filterLabel}>Price<select className={selectClass} value={numberValue(priceMin)} onChange={(event) => { const price = toNumber(event.target.value); filterChange(setPriceMin, price); filterChange(setPriceMax, price) }}><option value="">Any price</option>{prices.map((price) => <option key={price} value={price}>{formatPrice(price)}</option>)}</select></label>
-      <label className={filterLabel}>Year<select className={selectClass} value={numberValue(yearFrom)} onChange={(event) => filterChange(setYearFrom, toNumber(event.target.value))}><option value="">Any year</option>{years.map((item) => <option key={item} value={item}>{item}+</option>)}</select></label>
-      <label className={filterLabel}>Body type<select className={selectClass} value={bodyType} onChange={(event) => filterChange(setBodyType, event.target.value)}><option value="">All body types</option>{bodyTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
-      <label className={filterLabel}>Drivetrain<select className={selectClass} value={drivetrain} onChange={(event) => filterChange(setDrivetrain, event.target.value)}><option value="">All drivetrains</option>{drivetrains.map((item) => <option key={item}>{item}</option>)}</select></label>
-      <label className={filterLabel}>Transmission<select className={selectClass} value={transmission} onChange={(event) => filterChange(setTransmission, event.target.value)}><option value="">All transmissions</option>{transmissions.map((item) => <option key={item}>{item}</option>)}</select></label>
+      <FilterSelect label="Make" value={make} onChange={(value) => { filterChange(setMake, value); setModel('') }}><option value="">All makes</option>{makes.map((item) => <option key={item}>{item}</option>)}</FilterSelect>
+      <FilterSelect label="Model" value={model} disabled={!make} onChange={(value) => filterChange(setModel, value)}><option value="">{make ? 'All models' : 'Select make'}</option>{models.map((item) => <option key={item}>{item}</option>)}</FilterSelect>
+      <FilterSelect label="Price" value={numberValue(priceMin)} onChange={(value) => { const price = toNumber(value); filterChange(setPriceMin, price); filterChange(setPriceMax, price) }}><option value="">Any price</option>{prices.map((price) => <option key={price} value={price}>{formatPrice(price)}</option>)}</FilterSelect>
+      <FilterSelect label="Year" value={numberValue(yearFrom)} onChange={(value) => filterChange(setYearFrom, toNumber(value))}><option value="">Any year</option>{years.map((item) => <option key={item} value={item}>{item}+</option>)}</FilterSelect>
+      <FilterSelect label="Body type" value={bodyType} onChange={(value) => filterChange(setBodyType, value)}><option value="">All body types</option>{bodyTypes.map((item) => <option key={item}>{item}</option>)}</FilterSelect>
+      <FilterSelect label="Drivetrain" value={drivetrain} onChange={(value) => filterChange(setDrivetrain, value)}><option value="">All drivetrains</option>{drivetrains.map((item) => <option key={item}>{item}</option>)}</FilterSelect>
+      <FilterSelect label="Transmission" value={transmission} onChange={(value) => filterChange(setTransmission, value)}><option value="">All transmissions</option>{transmissions.map((item) => <option key={item}>{item}</option>)}</FilterSelect>
     </div>
     <button className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 bg-[var(--color-button)] text-[13px] font-bold uppercase tracking-[0.04em] transition hover:bg-[var(--color-button-hover)] active:translate-y-px" onClick={() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} type="button"><FaSlidersH className="text-base" /> Apply filters</button>
     <button className="mt-3 w-full text-center text-[13px] font-semibold text-white/85 underline underline-offset-4 transition hover:text-white" onClick={resetFilters} type="button">Clear all</button>

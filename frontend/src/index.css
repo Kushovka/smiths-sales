@@ -689,9 +689,9 @@
     .home-inventory-carousel__controls { margin: 0 0 0 auto; }
     .home-inventory-carousel__controls button { width: 38px; height: 38px; }
     .home-inventory-carousel__count { display: inline-flex; margin: 0 0 0 8px; }
-    .home-inventory-carousel__content { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
-    .home-inventory-carousel__content::-webkit-scrollbar { display: none; }
-    .home-inventory-grid { width: max-content; min-width: 100%; grid-auto-flow: column; grid-template-columns: none; grid-template-rows: 1fr; grid-auto-columns: min(84vw, 360px); }
+    .home-inventory-carousel__content { overflow: hidden; overscroll-behavior-x: contain; touch-action: pan-y; }
+    .home-inventory-grid { width: 100%; min-width: 100%; grid-template-columns: minmax(0, 1fr); }
+    .home-inventory-grid--loading > :not(:first-child) { display: none; }
     .home-inventory-card { min-height: 220px; padding: 12px 19px; }
     .home-inventory-card__image { min-height: 112px; }
     .home-inventory-card__image img { height: 120px; }
@@ -1028,7 +1028,7 @@
   .warranty-hero h1 { width: 100%; max-width: none; margin: 0 0 20px; color: #171717; font-size: clamp(4.5rem,7vw,7.2rem); font-weight: 400; letter-spacing: -.045em; line-height: .9; text-transform: none; }
   .warranty-hero-lead { max-width: 780px; margin: 0 0 26px; color: #4d4d4d; font-size: 18px; line-height: 1.5; }
   .warranty-hero-actions { display: grid; width: min(100%, 740px); grid-template-columns: 1fr 1fr; gap: 12px; }
-  .warranty-hero-actions a { display: flex; min-height: 50px; align-items: center; justify-content: center; gap: 10px; padding: 0 12px; font-size: 13px; font-weight: 700; text-decoration: none; }
+  .warranty-hero-actions :is(a,button) { display: flex; min-height: 50px; align-items: center; justify-content: center; gap: 10px; padding: 0 12px; font-size: 13px; font-weight: 700; text-decoration: none; }
   .warranty-call-button { background: var(--color-button); color: #fff; }
   .warranty-call-button:hover { background: var(--color-button-hover); }
   .warranty-ask-button { border: 1px solid #aaa9a2; color: #101412; }
@@ -1555,3 +1555,5 @@ a[class*="action"] {
 .team-gallery .grid > article:nth-child(6) .team-portrait img[src*="uploaded-"] { top: -26.2%; }
 .team-gallery .grid > article:nth-child(7) .team-portrait img[src*="uploaded-"] { top: -24.9%; }
 .team-gallery .grid > article:nth-child(8) .team-portrait img[src*="uploaded-"] { top: -33.7%; }
+.page-transition { display: grid; min-width: 0; }
+.page-transition > * { grid-area: 1 / 1; min-width: 0; }

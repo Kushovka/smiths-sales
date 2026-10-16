@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { FaArrowRight, FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
 import { LeadForm } from '../components/LeadForm'
+import { LeadFormDialog } from '../components/LeadFormDialog'
 import { Seo } from '../components/Seo'
 import { business } from '../data/business'
+import { trackContactCta } from '../utils/ctaTracking'
 
 const exclusions = [
   ['Wear & Maintenance', 'Normal wear and tear, routine maintenance, scheduled service, and maintenance-related failures.'],
@@ -10,8 +13,10 @@ const exclusions = [
   ['Misuse or Modifications', 'Damage caused by misuse, negligence, improper operation, lack of maintenance, abuse, or unauthorized modifications.'],
 ]
 
-export const WarrantyPage = () => (
-  <>
+export const WarrantyPage = () => {
+  const [inquiryOpen, setInquiryOpen] = useState(false)
+
+  return <>
     <Seo title="Warranty information" description={`Review limited warranty information and contact ${business.name} for coverage details on a specific vehicle.`} />
     <main className="warranty-page">
       <section className="warranty-container warranty-hero" aria-labelledby="warranty-title">
@@ -20,7 +25,7 @@ export const WarrantyPage = () => (
           <p className="warranty-hero-lead">In addition to our return policy, qualifying vehicles include a limited warranty for major mechanical components. Coverage begins at delivery and ends after 90 calendar days or 3,000 additional miles, whichever comes first.</p>
           <div className="warranty-hero-actions">
             <a className="warranty-call-button" href={business.phoneHref}><FaPhoneAlt aria-hidden="true" />Call {business.phone}</a>
-            <a className="warranty-ask-button" href="#warranty-form"><FaEnvelope aria-hidden="true" />Ask About Coverage <FaArrowRight aria-hidden="true" /></a>
+            <button type="button" className="warranty-ask-button" onClick={() => { trackContactCta('contact_form_click', 'Warranty Ask About Coverage'); setInquiryOpen(true) }}><FaEnvelope aria-hidden="true" />Ask About Coverage <FaArrowRight aria-hidden="true" /></button>
           </div>
         </div>
       </section>
@@ -105,5 +110,19 @@ export const WarrantyPage = () => (
         </div>
       </section>
     </main>
+    <LeadFormDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} dialogTitle="Ask About Coverage" formProps={{
+      title: 'Send Warranty Request',
+      variant: 'default',
+      className: 'warranty-lead-form',
+      markRequiredNameFields: true,
+      singleNameField: true,
+      showVehicleInterest: true,
+      phonePlaceholder: 'Phone*',
+      messagePlaceholder: "Message (optional)\nI'm interested in warranty information for this vehicle.",
+      actionAside: <a className="warranty-request-phone" href={business.phoneHref}>
+        <FaPhoneAlt aria-hidden="true" />
+        <span><small>Prefer to talk?</small><strong>{business.phone}</strong><small>Call or Text</small></span>
+      </a>,
+    }} />
   </>
-)
+}

@@ -21,6 +21,7 @@ type LeadFormProps = {
   phonePlaceholder?: string
   actionAside?: ReactNode
   inquiryOptions?: string[]
+  animateInView?: boolean
 }
 
 const COUNTRY_CODE_PREFIX = '+1 '
@@ -43,7 +44,7 @@ const formatUsPhone = (value: string) => {
   return `${COUNTRY_CODE_PREFIX}(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
 }
 
-export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messagePlaceholder = 'Message (optional)', messageDefaultValue, className = '', variant = 'default', showVehicleInterest = false, markRequiredNameFields = false, singleNameField = false, phonePlaceholder = '(570) 555-0100', actionAside, inquiryOptions }: LeadFormProps) => {
+export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messagePlaceholder = 'Message (optional)', messageDefaultValue, className = '', variant = 'default', showVehicleInterest = false, markRequiredNameFields = false, singleNameField = false, phonePlaceholder = '(570) 555-0100', actionAside, inquiryOptions, animateInView = false }: LeadFormProps) => {
   const prefersReducedMotion = useReducedMotion()
   const formStartedAt = useMemo(() => Date.now(), [])
   const [sent, setSent] = useState(false)
@@ -57,10 +58,10 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
       className={`surface-card p-5 sm:p-6 ${variant === 'contact' ? 'contact-form' : variant === 'vehicle' ? 'lg:p-7' : 'rounded-md'} ${className}`}
       action="/api/leads"
       method="post"
-      initial={prefersReducedMotion ? false : { opacity: 0, clipPath: 'inset(0 0 8% 0)' }}
-      whileInView={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: prefersReducedMotion ? 0.14 : 0.4, ease: [0.16, 1, 0.3, 1] }}
+      initial={!animateInView || prefersReducedMotion ? false : { opacity: 0, clipPath: 'inset(0 0 8% 0)' }}
+      whileInView={animateInView ? { opacity: 1, clipPath: 'inset(0 0 0% 0)' } : undefined}
+      viewport={animateInView ? { once: true, amount: 0.2 } : undefined}
+      transition={animateInView ? { duration: prefersReducedMotion ? 0.14 : 0.4, ease: [0.16, 1, 0.3, 1] } : undefined}
       onSubmit={async (event) => {
         event.preventDefault()
         const formElement = event.currentTarget
