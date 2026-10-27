@@ -61,7 +61,7 @@ export const ContactPage = () => (
             <p>We’re located right on PA-286 in Commodore, Pennsylvania. Stop by to see our inventory in person, meet our team, and experience the difference at Smith’s Sales &amp; Services.</p>
             <a className="contact-action contact-action-secondary contact-location-button" href={business.mapsUrl} target="_blank" rel="noreferrer" onClick={() => trackContactCta('directions_click', 'Contact Page Map Directions')}><FaMapMarkerAlt aria-hidden="true" /> Open in Google Maps <FaArrowRight aria-hidden="true" /></a>
           </div>
-          <img className="contact-dealership-photo" src="/images/commodore-dealership.webp" alt="Smith's Sales & Services dealership in Commodore, Pennsylvania" />
+          <img className="contact-dealership-photo" src="/images/commodore-dealership-1400.webp" width="1400" height="467" alt="Smith's Sales & Services dealership in Commodore, Pennsylvania" />
         </div>
         <iframe title="Smith's Sales & Services map" className="contact-map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={business.mapEmbedUrl} />
       </div>

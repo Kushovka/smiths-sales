@@ -4,6 +4,7 @@ import { FaArrowRight, FaChevronDown, FaChevronLeft, FaChevronRight, FaThLarge, 
 import { getVehicleFilters, listVehicles } from '../api/vehicles'
 import { Seo } from '../components/Seo'
 import { VehicleGridSkeleton } from '../components/Skeletons'
+import { VehicleImage } from '../components/VehicleImage'
 import type { Vehicle } from '../types/vehicle'
 import { formatNumber, formatPrice } from '../utils/format'
 
@@ -27,7 +28,7 @@ const InventoryVehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
   return <article className="inventory-vehicle-card group flex min-w-0 flex-col overflow-hidden rounded-[3px] border border-[var(--color-border)] bg-[var(--color-surface)] transition-colors duration-200 hover:border-[var(--color-primary)]">
     <div className="relative">
       <Link to={`/inventory/${vehicle.slug}`} aria-label={`View ${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="relative block aspect-[1.72/1] overflow-hidden bg-[var(--color-primary)]">
-        <img src={vehicle.images[0]} alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
+        <VehicleImage src={vehicle.images[0]} variant="cards" alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
         <span className="absolute left-2 top-2 bg-[var(--color-primary)] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.08em] text-[#fffdf8]">{vehicle.bodyType}</span>
       </Link>
     </div>
@@ -52,7 +53,7 @@ const InventoryVehicleCard = ({ vehicle }: { vehicle: Vehicle }) => {
 
 const InventoryVehicleListItem = ({ vehicle }: { vehicle: Vehicle }) => (
   <article className="group grid min-w-0 gap-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-3 transition hover:border-[var(--color-primary)] sm:grid-cols-[170px_minmax(0,1fr)_auto] sm:items-center sm:p-4">
-    <Link to={`/inventory/${vehicle.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-[var(--color-primary)] sm:aspect-[5/3]"><img src={vehicle.images[0]} alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" /><span className="absolute left-0 top-0 bg-[var(--color-primary)] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.08em] text-[#fffdf8]">{vehicle.bodyType}</span></Link>
+    <Link to={`/inventory/${vehicle.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-[var(--color-primary)] sm:aspect-[5/3]"><VehicleImage src={vehicle.images[0]} variant="cards" alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" /><span className="absolute left-0 top-0 bg-[var(--color-primary)] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.08em] text-[#fffdf8]">{vehicle.bodyType}</span></Link>
     <div className="min-w-0">{vehicle.stockNumber ? <p className="text-[11px] font-bold uppercase tracking-[0.11em] text-[var(--color-muted)]">Stock #{vehicle.stockNumber}</p> : null}<h3 className="mt-1.5 text-[30px] font-bold leading-none text-[var(--color-text)]">{vehicle.year} {vehicle.make} {vehicle.model}</h3><p className="mt-1.5 truncate text-[14px] text-[var(--color-muted)]">{vehicle.trim}</p><p className="mt-3 text-[13px] leading-[1.45] text-[var(--color-muted)]">{formatNumber(vehicle.mileage)} mi <span className="px-1 text-[var(--color-accent)]">•</span> {vehicle.drivetrain} <span className="px-1 text-[var(--color-accent)]">•</span> {vehicle.transmission}</p></div>
     <div className="grid grid-cols-[1fr_auto] items-center gap-3 border-t border-[var(--color-divider)] pt-3 sm:block sm:border-t-0 sm:pt-0 sm:text-right"><p className="text-[36px] font-bold leading-none tracking-tight text-[var(--color-primary)]">{formatPrice(vehicle.price)}</p><Link to={`/inventory/${vehicle.slug}`} className="site-button inline-flex h-10 items-center justify-center bg-[var(--color-primary)] px-4 text-[12px] font-bold uppercase tracking-[0.06em] text-white transition hover:bg-[var(--color-accent)]">View details</Link></div>
   </article>

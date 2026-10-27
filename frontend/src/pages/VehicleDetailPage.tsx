@@ -7,6 +7,7 @@ import { Button } from '../components/Button'
 import { LeadForm } from '../components/LeadForm'
 import { LeadFormDialog } from '../components/LeadFormDialog'
 import { Seo } from '../components/Seo'
+import { VehicleImage } from '../components/VehicleImage'
 import { VehicleDetailSkeleton } from '../components/Skeletons'
 import { VehicleGallery } from '../components/VehicleGallery'
 import { business } from '../data/business'
@@ -39,7 +40,7 @@ const Feature = ({ feature }: { feature: string }) => (
 const RelatedVehicleCard = ({ vehicle }: { vehicle: Vehicle }) => (
   <article className="inventory-vehicle-card group flex min-w-0 flex-col overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface)]">
     <Link to={`/inventory/${vehicle.slug}`} aria-label={`View ${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="block aspect-[1.72/1] overflow-hidden bg-[var(--color-primary)]">
-      <img src={vehicle.images[0]} alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
+      <VehicleImage src={vehicle.images[0]} variant="cards" alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]" loading="lazy" />
     </Link>
     <div className="flex flex-1 flex-col px-4 pb-3 pt-3 sm:px-5">
       <Link to={`/inventory/${vehicle.slug}`} className="text-[var(--color-text)]">
@@ -145,7 +146,7 @@ export const VehicleDetailPage = () => {
             features: sourceFeatures.length ? sourceFeatures : item.features,
           })
           setLoadError(false)
-          trackViewContent(item.id, `${item.year} ${item.make} ${item.model} ${item.trim}`, item.price)
+          trackViewContent(item.stockNumber || item.id, `${item.year} ${item.make} ${item.model} ${item.trim}`, item.price)
         }
       })
       .catch(() => { if (!cancelled) { setVehicle(null); setLoadError(true) } })
@@ -205,13 +206,13 @@ export const VehicleDetailPage = () => {
       </div>
       <aside className="min-w-0">
         <section id="features" className="scroll-mt-24"><h2 className="border-b border-[var(--color-divider)] pb-2 text-[28px] font-bold leading-none text-[var(--color-primary)]">Key features</h2><div className="mt-3 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">{vehicle.features.map((feature) => <Feature key={feature} feature={feature} />)}</div></section>
-        <section id="location-contact" className="mt-7 scroll-mt-24 border border-[var(--color-divider)] bg-[var(--color-surface)] p-3"><h2 className="mb-2 text-[24px] font-bold leading-none text-[var(--color-primary)]">Location</h2><div className="grid gap-3 sm:grid-cols-[1fr_1.1fr]"><img src="/images/commodore-dealership.webp" alt="Smith's Sales & Services dealership in Commodore, Pennsylvania" className="h-[150px] w-full object-cover" /><div className="grid gap-3 sm:grid-cols-2 sm:items-start"><div className="flex items-start gap-2.5 text-[11px] leading-4"><FaMapMarkerAlt className="mt-0.5 shrink-0 text-base" /><div>{business.address}<br />{business.cityState} {business.postalCode}<a href={business.mapsUrl} target="_blank" rel="noreferrer" className="mt-1 block font-semibold text-[var(--color-accent)] underline underline-offset-2">View on Map →</a></div></div><div className="grid gap-4 text-[11px] leading-4"><a href={phoneHref} className="flex items-start gap-2.5 font-semibold"><FaPhoneAlt className="mt-0.5 shrink-0 text-base" />{business.phone}</a><p className="flex items-start gap-2.5"><FaClock className="mt-0.5 shrink-0 text-base" /><span>Monday to Friday: 9AM to 5PM<br />Saturday and Sunday: Closed</span></p></div></div></div></section>
+        <section id="location-contact" className="mt-7 scroll-mt-24 border border-[var(--color-divider)] bg-[var(--color-surface)] p-3"><h2 className="mb-2 text-[24px] font-bold leading-none text-[var(--color-primary)]">Location</h2><div className="grid gap-3 sm:grid-cols-[1fr_1.1fr]"><img src="/images/commodore-dealership-1400.webp" width="1400" height="467" alt="Smith's Sales & Services dealership in Commodore, Pennsylvania" className="h-[150px] w-full object-cover" /><div className="grid gap-3 sm:grid-cols-2 sm:items-start"><div className="flex items-start gap-2.5 text-[11px] leading-4"><FaMapMarkerAlt className="mt-0.5 shrink-0 text-base" /><div>{business.address}<br />{business.cityState} {business.postalCode}<a href={business.mapsUrl} target="_blank" rel="noreferrer" className="mt-1 block font-semibold text-[var(--color-accent)] underline underline-offset-2">View on Map →</a></div></div><div className="grid gap-4 text-[11px] leading-4"><a href={phoneHref} className="flex items-start gap-2.5 font-semibold" onClick={() => trackContactCta('phone_click', 'Vehicle Location Phone')}><FaPhoneAlt className="mt-0.5 shrink-0 text-base" />{business.phone}</a><p className="flex items-start gap-2.5"><FaClock className="mt-0.5 shrink-0 text-base" /><span>Monday to Friday: 9AM to 5PM<br />Saturday and Sunday: Closed</span></p></div></div></div></section>
         <section id="request-info" className="vehicle-inquiry mt-5 grid gap-6 p-5 text-white sm:p-6">
           <div><h2 className="text-[34px] font-bold leading-none sm:text-[40px]">Get more information</h2><p className="mt-3 text-[14px] leading-6 text-white/75">Have a question or want to schedule a time to see this vehicle? Send us a message and we’ll get back to you shortly.</p></div>
-          <LeadForm title="Send Inquiry" vehicleId={vehicle.id} vehicleName={title} vehicleValue={vehicle.price} variant="vehicle" className="vehicle-inquiry-form" messageDefaultValue={`I'm interested in the ${title}. Please contact me with more information.`} />
+          <LeadForm title="Send Inquiry" vehicleId={vehicle.id} vehicleContentId={vehicle.stockNumber || vehicle.id} vehicleName={title} vehicleValue={vehicle.price} variant="vehicle" className="vehicle-inquiry-form" />
         </section>
       </aside>
     </div></section>
     <RelatedVehiclesCarousel vehicles={recommendations} />
-  </main><LeadFormDialog open={inquiryOpen} onClose={closeInquiry} dialogTitle="Request information" subtitle={title} formProps={{ title: 'Send Inquiry', vehicleId: vehicle.id, vehicleName: title, vehicleValue: vehicle.price, variant: 'vehicle', className: 'vehicle-inquiry-form', messageDefaultValue: `I'm interested in the ${title}. Please contact me with more information.` }} /></>
+  </main><LeadFormDialog open={inquiryOpen} onClose={closeInquiry} dialogTitle="Request information" subtitle={title} formProps={{ title: 'Send Inquiry', vehicleId: vehicle.id, vehicleContentId: vehicle.stockNumber || vehicle.id, vehicleName: title, vehicleValue: vehicle.price, variant: 'vehicle', className: 'vehicle-inquiry-form' }} /></>
 }

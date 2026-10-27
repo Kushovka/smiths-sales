@@ -13,6 +13,9 @@ class Settings:
     )
     META_PIXEL_ID = os.getenv("META_PIXEL_ID", "")
     META_ACCESS_TOKEN = os.getenv("META_ACCESS_TOKEN", "")
+    META_GRAPH_API_VERSION = os.getenv("META_GRAPH_API_VERSION", "v26.0")
+    META_TEST_EVENT_CODE = os.getenv("META_TEST_EVENT_CODE", "")
+    PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://smithssales.net").rstrip("/")
     BASIN_FORM_ACTION = os.getenv("BASIN_FORM_ACTION", "")
 
     @property

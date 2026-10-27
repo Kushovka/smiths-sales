@@ -6,7 +6,6 @@ from app.models.lead import Lead
 from app.models.vehicle import Vehicle
 from app.schemas.lead import LeadCreate
 from app.services.basin_service import send_lead_to_basin
-from app.services.meta_capi import send_lead_event
 
 
 TRACKING_FIELDS = {
@@ -42,6 +41,5 @@ def create_lead(db: Session, payload: LeadCreate) -> Lead:
     db.add(lead)
     db.commit()
     db.refresh(lead)
-    send_lead_event(payload)
     send_lead_to_basin(payload)
     return lead

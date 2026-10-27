@@ -21,7 +21,7 @@ const upsertMeta = (selector: string, attributes: Record<string, string>, conten
   meta.content = content
 }
 
-export const Seo = ({ title, description, schema, image = '/images/smiths-sales-hero.webp', openGraphType = 'website' }: SeoProps) => {
+export const Seo = ({ title, description, schema, image = '/images/smiths-sales-hero-1894.webp', openGraphType = 'website' }: SeoProps) => {
   useEffect(() => {
     const pageTitle = title.includes(business.name) ? title : `${title} | ${business.name}`
     const canonicalUrl = `${siteUrl}${window.location.pathname}`

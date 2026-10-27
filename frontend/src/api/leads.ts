@@ -23,8 +23,14 @@ export type LeadPayload = {
   value?: number
 }
 
+export type CreatedLead = {
+  id: string
+  capi_ticket?: string | null
+  capi_test_event_code?: string | null
+}
+
 export const createLead = async (payload: LeadPayload) => {
-  const response = await apiClient.post('/leads', {
+  const response = await apiClient.post<CreatedLead>('/leads', {
     vehicle_id: payload.vehicleId,
     lead_type: payload.leadType,
     customer_name: payload.customerName,
@@ -50,3 +56,33 @@ export const createLead = async (payload: LeadPayload) => {
 
   return response.data
 }
+
+export const sendMetaCapiLead = async (payload: {
+  leadId: string
+  eventId: string
+  capiTicket: string
+  email?: string
+  phone?: string
+  firstName?: string | null
+  lastName?: string | null
+  contentId?: string
+  currency?: string
+  price?: number | null
+  fbp?: string | null
+  fbc?: string | null
+  testEventCode?: string | null
+}) => apiClient.post('/events/capi', {
+  lead_id: payload.leadId,
+  event_id: payload.eventId,
+  capi_ticket: payload.capiTicket,
+  email: payload.email || undefined,
+  phone: payload.phone || undefined,
+  first_name: payload.firstName || undefined,
+  last_name: payload.lastName || undefined,
+  content_id: payload.contentId || undefined,
+  currency: payload.currency || undefined,
+  price: payload.price ?? undefined,
+  fbp: payload.fbp || undefined,
+  fbc: payload.fbc ?? '',
+  test_event_code: payload.testEventCode || undefined,
+})

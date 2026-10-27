@@ -29,7 +29,6 @@ class VehicleBase(BaseModel):
     specs: dict = Field(default_factory=dict)
     details: dict = Field(default_factory=dict)
     featured: bool = False
-    financing_available: bool = False
     warranty_available: bool = True
     delivery_available: bool = True
 

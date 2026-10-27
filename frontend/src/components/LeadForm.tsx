@@ -2,17 +2,17 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo, useState, type ReactNode } from 'react'
 import { FaArrowRight } from 'react-icons/fa'
 import { FiInfo } from 'react-icons/fi'
-import { createLead } from '../api/leads'
+import { createLead, sendMetaCapiLead } from '../api/leads'
 import { trackingConfig } from '../config/tracking'
 import { createMetaEventId, getCookieValue, splitName, trackLead } from '../utils/metaPixel'
 
 type LeadFormProps = {
   title: string
   vehicleId?: string
+  vehicleContentId?: string
   vehicleName?: string
   vehicleValue?: number
   messagePlaceholder?: string
-  messageDefaultValue?: string
   className?: string
   variant?: 'contact' | 'default' | 'vehicle'
   showVehicleInterest?: boolean
@@ -44,7 +44,7 @@ const formatUsPhone = (value: string) => {
   return `${COUNTRY_CODE_PREFIX}(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
 }
 
-export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messagePlaceholder = 'Message (optional)', messageDefaultValue, className = '', variant = 'default', showVehicleInterest = false, markRequiredNameFields = false, singleNameField = false, phonePlaceholder = '(570) 555-0100', actionAside, inquiryOptions, animateInView = false }: LeadFormProps) => {
+export const LeadForm = ({ title, vehicleId, vehicleContentId, vehicleName, vehicleValue, messagePlaceholder = 'Message (optional)', className = '', variant = 'default', showVehicleInterest = false, markRequiredNameFields = false, singleNameField = false, phonePlaceholder = '(570) 555-0100', actionAside, inquiryOptions, animateInView = false }: LeadFormProps) => {
   const prefersReducedMotion = useReducedMotion()
   const formStartedAt = useMemo(() => Date.now(), [])
   const [sent, setSent] = useState(false)
@@ -85,7 +85,7 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
         const fbp = getCookieValue('_fbp')
         const fbc = getCookieValue('_fbc')
         const { firstName: metaFirstName, lastName: metaLastName } = splitName(customerName)
-        const contentIds = [vehicleId ?? `${trackingConfig.meta.defaultLeadContentPrefix}-${leadType}`]
+        const contentIds = [vehicleContentId?.trim() || vehicleId || `${trackingConfig.meta.defaultLeadContentPrefix}-${leadType}`]
         const contentType = vehicleId ? trackingConfig.meta.productContentType : trackingConfig.meta.serviceContentType
         const contentName = vehicleName ?? `${leadType} request`
         const currency = trackingConfig.meta.currency
@@ -98,7 +98,7 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
         }
 
         try {
-          await createLead({
+          const savedLead = await createLead({
             vehicleId,
             leadType,
             customerName,
@@ -139,6 +139,28 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
             })
           } catch {
             // Browser tracking can be blocked; the lead itself was already submitted.
+          }
+          if (savedLead.capi_ticket) {
+            try {
+              await sendMetaCapiLead({
+                leadId: savedLead.id,
+                eventId: metaEventId,
+                capiTicket: savedLead.capi_ticket,
+                email,
+                phone,
+                firstName: metaFirstName,
+                lastName: metaLastName,
+                contentId: contentIds[0] ?? `${trackingConfig.meta.defaultLeadContentPrefix}-${leadType}`,
+                currency,
+                price: eventValue,
+                fbp,
+                fbc,
+                testEventCode: savedLead.capi_test_event_code,
+              })
+            } catch (capiError) {
+              // The lead is already saved; inspect the /api/events/capi response in Network.
+              console.warn('Meta CAPI response was not successful', capiError)
+            }
           }
           setError('')
           setSent(true)
@@ -189,7 +211,7 @@ export const LeadForm = ({ title, vehicleId, vehicleName, vehicleValue, messageP
         <input aria-label="Email" className="input" name="email" placeholder="Email" type="email" />
         {inquiryOptions ? <select aria-label="What can we help you with?" className="input sm:col-span-2" name="inquiryType" defaultValue=""><option value="" disabled>What can we help you with?</option>{inquiryOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select> : null}
         {showVehicleInterest ? <input aria-label="Vehicle or Stock Number (optional)" className="input sm:col-span-2" name="vehicleInterest" placeholder="Vehicle or Stock # (optional)" /> : null}
-        <textarea aria-label="Message" className="input min-h-28 sm:col-span-2" name="message" placeholder={messagePlaceholder} defaultValue={messageDefaultValue} />
+        <textarea aria-label="Message" className="input min-h-28 sm:col-span-2" name="message" placeholder={messagePlaceholder} />
       </div>
       <div className={`mt-5${actionAside ? ' form-actions-with-aside' : ''}`}>
         <button className="inline-flex min-h-11 w-full items-center justify-center gap-3 rounded-[3px] bg-[var(--color-primary)] px-5 py-3 text-sm font-bold text-white shadow-none transition hover:bg-[var(--color-primary-dark)] active:translate-y-px disabled:cursor-wait disabled:bg-[var(--color-disabled)] sm:w-auto" disabled={submitting} type="submit">

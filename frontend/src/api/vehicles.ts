@@ -120,6 +120,26 @@ export const resolveImageUrl = (image: string) => {
   return image
 }
 
+export const vehicleImageVariantUrl = (image: string, variant: 'cards' | 'thumbs') => {
+  const originalUrl = resolveImageUrl(image)
+  try {
+    const url = new URL(originalUrl, window.location.origin)
+    const mediaPrefix = '/media/vehicles/'
+    if (!url.pathname.startsWith(mediaPrefix)) return originalUrl
+
+    const relativePath = url.pathname.slice(mediaPrefix.length)
+    const separator = relativePath.lastIndexOf('/')
+    if (separator < 0 || relativePath.slice(0, separator).split('/').includes(variant)) return originalUrl
+
+    url.pathname = `${mediaPrefix}${relativePath.slice(0, separator)}/${variant}/${relativePath.slice(separator + 1)}`
+    // Bump this when regenerating derivatives so immutable browser caches refresh.
+    url.searchParams.set('v', '1')
+    return url.toString()
+  } catch {
+    return originalUrl
+  }
+}
+
 const toVehicleDetails = (details?: ApiVehicle['details']): VehicleDetails => ({
   info: details?.info ?? [],
   sections: details?.sections ?? [],

@@ -5,6 +5,7 @@ import { FaArrowRight, FaBars, FaChevronDown, FaClock, FaMapMarkerAlt, FaPhoneAl
 import { FiChevronRight, FiFileText, FiGrid, FiPhone, FiSearch, FiShield, FiTruck, FiUsers } from 'react-icons/fi'
 import { listVehicles } from '../api/vehicles'
 import { business } from '../data/business'
+import { VehicleImage } from './VehicleImage'
 import type { Vehicle } from '../types/vehicle'
 import { trackContactCta } from '../utils/ctaTracking'
 import { formatPrice } from '../utils/format'
@@ -91,7 +92,7 @@ const HeaderSearch = () => {
     </div>
     {query.trim().length >= 2 ? <div className="absolute right-0 top-[calc(100%+0.6rem)] z-50 max-h-[min(480px,calc(100dvh-8rem))] w-[min(620px,calc(100vw-2.5rem))] overflow-y-auto rounded-[5px] bg-[#171717] text-white shadow-[0_22px_54px_rgba(0,0,0,0.38)]">
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3.5 sm:px-5"><span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/60">{loading ? 'Searching' : `${matches.length} matching vehicles`}</span><span className="h-1.5 w-1.5 rounded-full bg-[var(--color-button)]" aria-hidden="true" /></div>
-      {loading ? <p className="px-5 py-6 text-sm text-white/65">Looking through current inventory…</p> : matches.length ? <><div className="divide-y divide-white/10">{matches.map((vehicle) => <Link key={vehicle.id} to={`/inventory/${vehicle.slug}`} onClick={() => setQuery('')} className="group grid min-h-[92px] grid-cols-[76px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3 transition-colors hover:bg-white/[0.055] sm:min-h-[104px] sm:grid-cols-[104px_minmax(0,1fr)_auto] sm:gap-4 sm:px-5 sm:py-3.5"><img src={vehicle.images[0]} alt="" className="h-[60px] w-[76px] shrink-0 object-cover sm:h-[78px] sm:w-[104px]" /><span className="min-w-0"><strong className="block truncate text-[14px] font-bold leading-tight text-white sm:text-[17px]">{vehicle.year} {vehicle.make} {vehicle.model}</strong><span className="mt-1 block truncate text-[11px] text-white/55 sm:text-[13px]">{vehicle.trim || 'Available now'}</span></span><span className="flex items-center gap-2 pl-1 text-right"><span className="whitespace-nowrap text-[12px] font-bold tabular-nums text-[#f06a6f] sm:text-[14px]">{formatPrice(vehicle.price)}</span><FaArrowRight aria-hidden="true" className="hidden text-[11px] text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white sm:block" /></span></Link>)}</div><button type="button" onClick={viewSearch} className="flex h-12 w-full items-center justify-between border-t border-white/10 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition hover:bg-[var(--color-button)] sm:px-5"><span>Browse all matching vehicles</span><FaArrowRight aria-hidden="true" /></button></> : <p className="px-5 py-6 text-sm text-white/65">No vehicles match “{query.trim()}”.</p>}
+      {loading ? <p className="px-5 py-6 text-sm text-white/65">Looking through current inventory…</p> : matches.length ? <><div className="divide-y divide-white/10">{matches.map((vehicle) => <Link key={vehicle.id} to={`/inventory/${vehicle.slug}`} onClick={() => setQuery('')} className="group grid min-h-[92px] grid-cols-[76px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3 transition-colors hover:bg-white/[0.055] sm:min-h-[104px] sm:grid-cols-[104px_minmax(0,1fr)_auto] sm:gap-4 sm:px-5 sm:py-3.5"><VehicleImage src={vehicle.images[0]} variant="cards" alt="" className="h-[60px] w-[76px] shrink-0 object-cover sm:h-[78px] sm:w-[104px]" /><span className="min-w-0"><strong className="block truncate text-[14px] font-bold leading-tight text-white sm:text-[17px]">{vehicle.year} {vehicle.make} {vehicle.model}</strong><span className="mt-1 block truncate text-[11px] text-white/55 sm:text-[13px]">{vehicle.trim || 'Available now'}</span></span><span className="flex items-center gap-2 pl-1 text-right"><span className="whitespace-nowrap text-[12px] font-bold tabular-nums text-[#f06a6f] sm:text-[14px]">{formatPrice(vehicle.price)}</span><FaArrowRight aria-hidden="true" className="hidden text-[11px] text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white sm:block" /></span></Link>)}</div><button type="button" onClick={viewSearch} className="flex h-12 w-full items-center justify-between border-t border-white/10 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition hover:bg-[var(--color-button)] sm:px-5"><span>Browse all matching vehicles</span><FaArrowRight aria-hidden="true" /></button></> : <p className="px-5 py-6 text-sm text-white/65">No vehicles match “{query.trim()}”.</p>}
     </div> : null}
   </div>
 }
@@ -174,7 +175,7 @@ export const Header = () => {
           className="flex min-w-0 items-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--color-accent)]"
           onClick={() => setOpen(false)}
         >
-          <img src="/images/smiths-sales-logo.webp" alt="Smith's Sales & Services" className="h-auto w-[128px] shrink-0 sm:w-[146px] 2xl:w-[clamp(175px,12.3vw,252px)]" />
+          <img src="/images/smiths-sales-logo-512.webp" alt="Smith's Sales & Services" width="512" height="192" className="h-auto w-[128px] shrink-0 sm:w-[146px] 2xl:w-[clamp(175px,12.3vw,252px)]" />
         </Link>
 
         <div className="hidden min-w-0 2xl:flex 2xl:justify-center">
@@ -266,7 +267,7 @@ export const Header = () => {
             >
               <div className="flex shrink-0 items-start justify-between">
                 <Link to="/" className="flex items-center" onClick={() => setOpen(false)}>
-                  <img src="/images/smiths-sales-logo.webp" alt="Smith's Sales & Services" className="h-auto w-[190px] sm:w-[245px]" />
+                  <img src="/images/smiths-sales-logo-512.webp" alt="Smith's Sales & Services" width="512" height="192" className="h-auto w-[190px] sm:w-[245px]" />
                 </Link>
                 <button
                   aria-label="Close menu"

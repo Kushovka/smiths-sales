@@ -19,14 +19,14 @@ import { trackContactCta } from '../utils/ctaTracking'
 const returnHighlights = [
   { icon: FaCalendarAlt, title: '72-Hour Return Period', text: 'The return period begins when the delivery paperwork is signed and the vehicle is received.' },
   { icon: FaTachometerAlt, title: '250-Mile Additional Miles', text: 'You may drive up to 250 additional miles during the 72-hour period to properly evaluate the vehicle.' },
-  { icon: FaFileAlt, title: 'Written Warranty Included', text: 'Qualifying vehicles include written warranty documentation provided at the time of sale.' },
-  { icon: FaTruck, title: 'Seller-Paid Return Transport', text: 'For qualifying returns, we arrange and pay for return transportation under the written policy.' },
+  { icon: FaFileAlt, title: 'Warranty Included With Every Vehicle', text: 'Every vehicle we sell includes written 90-day / 3,000-mile limited warranty documentation at the time of sale.' },
+  { icon: FaTruck, title: 'Seller-Paid Return Transport', text: 'For returns that meet the written policy conditions, we arrange and pay for transportation.' },
 ]
 
 const steps = [
   ['Notify Us', 'Contact us within 72 hours of delivery and before exceeding 250 additional miles to let us know you would like to return the vehicle.'],
   ['Vehicle Inspection', 'Once the vehicle is returned, we inspect it to confirm it meets the return policy conditions.'],
-  ['Return Transport', 'We arrange and pay for return transportation for qualifying returns.'],
+  ['Return Transport', 'We arrange and pay for transportation for returns that meet the written policy conditions.'],
   ['Refund Processing', 'After inspection is complete and the vehicle meets the policy conditions, we process your refund according to the terms of sale.'],
 ]
 
@@ -42,8 +42,8 @@ const conditions = [
 const keyPoints = [
   [FaClock, '72-hour return period from delivery'],
   [FaTachometerAlt, '250-mile additional driving limit'],
-  [FaTruck, 'Seller-arranged and paid return transport for qualifying returns'],
-  [FaFileAlt, 'Written warranty included for qualifying vehicles'],
+  [FaTruck, 'Seller-arranged and paid return transport when the written policy conditions are met'],
+  [FaFileAlt, 'Written 90-day / 3,000-mile warranty included with every vehicle'],
   [FaShieldAlt, 'Clean title documentation provided'],
   [FaDollarSign, 'Upfront pricing with no hidden fees'],
 ] as const
@@ -53,12 +53,12 @@ export const GuaranteePage = () => {
 
   return <>
   <div className="guarantee-page">
-    <Seo title="72-Hour / 250-Mile Money-Back Guarantee" description={`Review the return policy, process, and conditions for qualifying vehicles at ${business.name}. Written purchase and return documents control eligibility.`} />
+    <Seo title="72-Hour / 250-Mile Money-Back Guarantee" description={`Every vehicle sold by ${business.name} includes a 72-hour / 250-mile return policy and written limited warranty. See the return terms and conditions.`} />
 
     <section className="guarantee-hero" aria-labelledby="guarantee-title">
       <div className="guarantee-hero-copy">
         <h1 id="guarantee-title">72-Hour / 250-Mile<br />Money Back Guarantee</h1>
-        <p>We want you to be completely satisfied with your purchase. That’s why qualifying vehicles include a 72-hour / 250-mile return policy and written warranty. We stand behind our vehicles and believe in honest deals, clear pricing, and no hidden fees.</p>
+        <p>Every vehicle we sell includes a 72-hour / 250-mile return policy and a written 90-day / 3,000-mile limited warranty. We stand behind our vehicles with clear terms, honest deals, and no hidden fees.</p>
         <div className="guarantee-actions">
           <a className="guarantee-button guarantee-button--red" href="#return-conditions">View Return Policy Details <FaArrowRight aria-hidden="true" /></a>
           <Link className="guarantee-button guarantee-button--light" to="/inventory">Shop Our Inventory <FaArrowRight aria-hidden="true" /></Link>
@@ -68,7 +68,7 @@ export const GuaranteePage = () => {
 
     <section className="guarantee-section guarantee-how" aria-labelledby="guarantee-how-title">
       <h2 id="guarantee-how-title">72 Hours and 250 Miles to Make Sure It Is Right for You</h2>
-      <p className="guarantee-section-intro">Take time to drive, inspect, and make sure the vehicle meets your needs. If it’s not the right fit, qualifying vehicles may be returned within 72 hours or 250 additional miles, whichever limit is reached first, under our written return policy.</p>
+      <p className="guarantee-section-intro">Take time to drive, inspect, and make sure the vehicle meets your needs. Any vehicle may be returned within 72 hours or 250 additional miles, whichever limit is reached first, provided the written return policy conditions are met.</p>
       <div className="guarantee-highlight-grid">
         {returnHighlights.map(({ icon: Icon, title, text }) => <article className="guarantee-highlight" key={title}><Icon aria-hidden="true" /><div><h3>{title}</h3><p>{text}</p></div></article>)}
       </div>
@@ -111,7 +111,7 @@ export const GuaranteePage = () => {
         <h2>Simple Terms. Clear Expectations.</h2>
         <p>Our 72-hour / 250-mile money-back guarantee is designed to give you confidence and peace of mind when you buy from Smith’s Sales &amp; Services.</p>
         <ul>{keyPoints.map(([Icon, text]) => <li key={text}><Icon aria-hidden="true" />{text}</li>)}</ul>
-        <p className="guarantee-terms-note">Eligibility, inspection requirements, exclusions, refund timing, and other conditions are governed by the signed purchase documents and written return policy.</p>
+        <p className="guarantee-terms-note">The 72-hour / 250-mile return period applies to every vehicle. Return condition requirements, exclusions, refund timing, and other terms are listed in the written return policy.</p>
       </article>
     </section>
 

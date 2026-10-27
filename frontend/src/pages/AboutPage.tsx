@@ -2,6 +2,7 @@ import { FaArrowRight, FaFileAlt, FaHandshake, FaHeadset, FaMapMarkerAlt, FaPhon
 import { Link } from 'react-router'
 import { Seo } from '../components/Seo'
 import { business } from '../data/business'
+import { trackContactCta } from '../utils/ctaTracking'
 
 const values = [
   { icon: FaHandshake, title: 'Honest deals', text: 'Straightforward pricing and clear answers.' },
@@ -41,7 +42,7 @@ export const AboutPage = () => (
     </section>
 
     <section className="about-story">
-      <img src="/images/commodore-dealership.webp" alt="The Smith's Sales & Services lot along PA-286" />
+      <img src="/images/commodore-dealership-1400.webp" width="1400" height="467" alt="The Smith's Sales & Services lot along PA-286" />
       <div className="about-story-copy">
         <h2>Built on Hard Work and a Commitment to Our Customers</h2>
         <p>Smith&apos;s Sales &amp; Services is located in Commodore, Pennsylvania. We help drivers shop for pre-owned vehicles with clear information, attentive service, and a straightforward buying experience.</p>
@@ -67,7 +68,7 @@ export const AboutPage = () => (
         <p>Browse our inventory or contact our team with any questions. We&apos;re here to help you find the right vehicle.</p>
         <div className="about-actions">
           <Link className="about-button about-button--red" to="/inventory">Shop Our Inventory <FaArrowRight /></Link>
-          <a className="about-button about-button--dark" href={business.phoneHref}><FaPhoneAlt /> Call {business.phone}</a>
+          <a className="about-button about-button--dark" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'About Page Call')}><FaPhoneAlt /> Call {business.phone}</a>
         </div>
       </div>
     </section>
@@ -79,7 +80,7 @@ export const AboutPage = () => (
           <p>We&apos;re located at {business.address}, {business.cityState} {business.postalCode}. Stop by to see our inventory and meet our team.</p>
           <a className="about-button" href={business.mapsUrl} target="_blank" rel="noreferrer"><FaMapMarkerAlt /> View on Map <FaArrowRight /></a>
         </div>
-        <img src="/images/dealership-about.webp" alt="Smith's Sales & Services on PA-286 in Commodore" />
+        <img src="/images/dealership-about-1600.webp" width="1600" height="634" alt="Smith's Sales & Services on PA-286 in Commodore" />
       </div>
       <div className="about-location-facts">
         <div><strong>Quality inventory</strong><span>A selection of inspected pre-owned vehicles.</span></div>

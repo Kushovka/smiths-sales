@@ -16,7 +16,7 @@ export const Footer = () => (
     <div className="home-footer-container">
       <div className="home-footer-main">
         <section className="home-footer-intro" aria-label="Smith's Sales & Services">
-          <Link to="/" className="home-footer-logo"><img src="/images/smiths-sales-logo-dark.webp" alt="Smith's Sales & Services" /></Link>
+          <Link to="/" className="home-footer-logo"><img src="/images/smiths-sales-logo-dark-512.webp" alt="Smith's Sales & Services" width="512" height="192" /></Link>
           <p>Used cars and services from a local Pennsylvania dealer. Quality vehicles, honest service, and a team that&apos;s always happy to help.</p>
           <a href={business.mapsUrl} target="_blank" rel="noreferrer" className="home-footer-contact-line" onClick={() => trackContactCta('directions_click', 'Footer Address')}><FaMapMarkerAlt /><span>{business.address}<br />{business.cityState} {business.postalCode}<br /><u>View on Google Maps <FaArrowRight /></u></span></a>
           <a href={business.phoneHref} className="home-footer-contact-line" onClick={() => trackContactCta('phone_click', 'Footer Call')}><FaPhoneAlt /><span>{business.phone}<br /><u>Call or Text <FaArrowRight /></u></span></a>

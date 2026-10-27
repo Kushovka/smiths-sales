@@ -6,10 +6,12 @@ import { listVehicles, resolveImageUrl } from "../api/vehicles";
 import { Button } from "../components/Button";
 import { ReviewCarousel } from "../components/ReviewCarousel";
 import { Seo } from "../components/Seo";
+import { VehicleImage } from "../components/VehicleImage";
 import { business } from "../data/business";
 import type { Vehicle } from "../types/vehicle";
 import { formatNumber, formatPrice } from "../utils/format";
 import { autoDealerSchema } from "../utils/schema";
+import { trackContactCta } from "../utils/ctaTracking";
 
 const FEATURED_CUTOUTS: Record<string, string> = {
   "2018-porsche-718-cayman-gts": "/media/vehicles/2018-porsche-718-cayman-gts/cutout.webp",
@@ -39,8 +41,9 @@ const FeaturedVehicleShowcase = ({ vehicle }: { vehicle: Vehicle }) => {
         className="home-inventory-card__image"
         aria-label={`View details for ${title}`}
       >
-        <img
+        <VehicleImage
           src={image}
+          variant="cards"
           alt={title}
           loading="lazy"
         />
@@ -90,7 +93,7 @@ const VehicleTypeChooser = ({ vehicles, loading }: { vehicles: Vehicle[]; loadin
             : bodyType ? `/inventory?bodyType=${encodeURIComponent(bodyType)}` : "/inventory";
           return (
             <Link className="vehicle-type-card" key={category.key} to={href}>
-              {representative?.images[0] ? <img src={representative.images[0]} alt={`${category.title} from the current inventory`} loading="lazy" /> : <span className="vehicle-type-card__empty" />}
+              {representative?.images[0] ? <VehicleImage src={representative.images[0]} variant="cards" alt={`${category.title} from the current inventory`} loading="lazy" /> : <span className="vehicle-type-card__empty" />}
               <span className="vehicle-type-card__shade" />
               <span className="vehicle-type-card__title">{category.title}<FaArrowRight /></span>
               <span className="vehicle-type-card__footer">
@@ -109,7 +112,7 @@ const HomeAboutSection = () => (
   <section className="home-about-section" aria-labelledby="home-about-title">
     <div className="home-about__panel">
       <div className="home-about__photo">
-        <img src="/images/dealership-about.webp" alt="Smith's Sales & Services dealership and vehicle lot in Commodore, Pennsylvania" loading="lazy" />
+        <img src="/images/dealership-about-1600.webp" alt="Smith's Sales & Services dealership and vehicle lot in Commodore, Pennsylvania" width="1600" height="634" loading="lazy" />
         <span className="home-about__location"><FaMapMarkerAlt />Commodore, PA</span>
       </div>
       <div className="home-about__content">
@@ -238,9 +241,13 @@ export const HomePage = () => {
 
       <section className="home-hero relative isolate flex min-h-[475px] items-center overflow-hidden bg-[#090909] text-white lg:h-[min(500px,calc(100svh-90px))] lg:min-h-[460px]">
         <img
-          src="/images/smiths-sales-hero.webp"
+          src="/images/smiths-sales-hero-1894.webp"
+          srcSet="/images/smiths-sales-hero-960.webp 960w, /images/smiths-sales-hero-1894.webp 1894w"
+          sizes="100vw"
           alt="Smith's Sales & Services dealership and vehicle lot in Commodore, Pennsylvania"
           className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+          width="1894"
+          height="830"
           fetchPriority="high"
         />
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,8,8,.95)_0%,rgba(8,8,8,.86)_24%,rgba(8,8,8,.22)_43%,rgba(8,8,8,.015)_68%),linear-gradient(0deg,rgba(8,8,8,.08),rgba(8,8,8,0)),linear-gradient(rgba(8,8,8,.28),rgba(8,8,8,.28))]" />
@@ -309,7 +316,7 @@ export const HomePage = () => {
             </p>
             <div className="visit-dealership-contact-row">
               <div><FaMapMarkerAlt /><p><strong>{business.address}</strong><span>{business.cityState} {business.postalCode}</span></p></div>
-              <a href={business.phoneHref}><FaPhoneAlt /><p><strong>{business.phone}</strong><span>Give us a call</span></p></a>
+              <a href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Homepage Phone')}><FaPhoneAlt /><p><strong>{business.phone}</strong><span>Give us a call</span></p></a>
             </div>
             <div className="visit-dealership-actions">
               <Button href={business.mapsUrl} className="visit-dealership-button visit-dealership-button--primary">Get directions <FaArrowRight /></Button>
@@ -317,7 +324,7 @@ export const HomePage = () => {
             </div>
           </div>
           <div className="visit-dealership-photo">
-            <img src="/images/commodore-dealership.webp" alt="Smith's Sales & Services dealership and vehicle lot in Commodore, Pennsylvania" loading="lazy" />
+            <img src="/images/commodore-dealership-1400.webp" alt="Smith's Sales & Services dealership and vehicle lot in Commodore, Pennsylvania" width="1400" height="467" loading="lazy" />
           </div>
         </div>
         <div className="visit-dealership-info" aria-label="Dealership hours and information">

@@ -17,14 +17,14 @@ export const WarrantyPage = () => {
   const [inquiryOpen, setInquiryOpen] = useState(false)
 
   return <>
-    <Seo title="Warranty information" description={`Review limited warranty information and contact ${business.name} for coverage details on a specific vehicle.`} />
+    <Seo title="Warranty information" description={`Every vehicle sold by ${business.name} includes the same 90-day / 3,000-mile limited warranty. Review coverage and exclusions.`} />
     <main className="warranty-page">
       <section className="warranty-container warranty-hero" aria-labelledby="warranty-title">
         <div className="warranty-hero-copy">
           <h1 id="warranty-title">90-Day / 3,000-Mile<br />Limited Warranty</h1>
-          <p className="warranty-hero-lead">In addition to our return policy, qualifying vehicles include a limited warranty for major mechanical components. Coverage begins at delivery and ends after 90 calendar days or 3,000 additional miles, whichever comes first.</p>
+          <p className="warranty-hero-lead">Every vehicle we sell includes the same limited warranty for covered major mechanical components. Coverage begins at delivery and ends after 90 calendar days or 3,000 additional miles, whichever comes first.</p>
           <div className="warranty-hero-actions">
-            <a className="warranty-call-button" href={business.phoneHref}><FaPhoneAlt aria-hidden="true" />Call {business.phone}</a>
+            <a className="warranty-call-button" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Warranty Page Call')}><FaPhoneAlt aria-hidden="true" />Call {business.phone}</a>
             <button type="button" className="warranty-ask-button" onClick={() => { trackContactCta('contact_form_click', 'Warranty Ask About Coverage'); setInquiryOpen(true) }}><FaEnvelope aria-hidden="true" />Ask About Coverage <FaArrowRight aria-hidden="true" /></button>
           </div>
         </div>
@@ -33,7 +33,7 @@ export const WarrantyPage = () => {
       <section className="warranty-container warranty-guidance" aria-label="Limited warranty coverage">
         <article className="warranty-how">
           <h2>Limited Mechanical Protection</h2>
-          <p>The limited warranty applies to substantial mechanical failure of qualifying major engine or drivetrain components that was not disclosed before the sale.</p>
+          <p>The limited warranty applies to substantial mechanical failure of covered major engine or drivetrain components that was not disclosed before the sale. It is included with every vehicle we sell.</p>
         </article>
         <article className="warranty-questions">
           <h2>90 Days or 3,000 Miles</h2>
@@ -58,31 +58,30 @@ export const WarrantyPage = () => {
       <section className="warranty-container warranty-info-columns" aria-label="Factory coverage and additional protection">
         <article className="warranty-info-panel">
           <h2>Factory Warranty Coverage</h2>
-          <p>Some vehicles may still have remaining manufacturer warranty coverage. Eligibility depends on model year, original in-service date, mileage, and the manufacturer’s terms.</p>
+          <p>Our 90-day / 3,000-mile limited warranty is included with every vehicle. Any remaining manufacturer warranty is separate and follows the manufacturer’s written terms.</p>
           <ul>
-            <li><strong>Coverage varies:</strong> Remaining factory coverage depends on the manufacturer, model, in-service date, mileage, and applicable warranty terms.</li>
+            <li><strong>Manufacturer coverage:</strong> Any remaining factory warranty is separate from our included limited warranty and is governed by the manufacturer’s written terms.</li>
             <li><strong>Covered components:</strong> Engine, transmission, drivetrain, electrical systems, and other components may be included under the applicable manufacturer warranty.</li>
             <li><strong>Authorized repairs:</strong> Covered repairs generally must follow the manufacturer’s procedures and authorized-service requirements.</li>
           </ul>
         </article>
         <article className="warranty-info-panel">
           <h2>Extended Warranty Options</h2>
-          <p>Additional protection plans or service contracts may be available for qualifying vehicles at an additional cost.</p>
+          <p>Optional extended protection plans or service contracts are separate from the limited warranty included with every vehicle and may be purchased at an additional cost.</p>
           <ul>
-            <li>Depending on the vehicle and selected plan, coverage may extend beyond the included limited warranty or add mileage coverage.</li>
-            <li>Options may be available for qualifying pre-owned vehicles.</li>
-            <li>Price and availability depend on the vehicle’s age, mileage, condition, selected term, and coverage level. Plan terms determine covered items, exclusions, and limits.</li>
+            <li>Each optional plan has its own written coverage, term, exclusions, and limits.</li>
+            <li>Ask our team for details about optional plans and their cost.</li>
           </ul>
         </article>
       </section>
 
       <section className="warranty-container warranty-preowned" aria-labelledby="warranty-vehicle-title">
         <div>
-          <h2 id="warranty-vehicle-title">Coverage Based on the Specific Vehicle</h2>
+          <h2 id="warranty-vehicle-title">One Limited Warranty for Every Vehicle</h2>
         </div>
         <div className="warranty-preowned-copy">
-          <p>Original factory coverage may have expired because of a vehicle’s age or mileage. Available protection depends on its condition, age, mileage, service history, usage, and manufacturer-warranty status.</p>
-          <p>Qualifying pre-owned vehicles include the 90-day / 3,000-mile limited warranty. Any vehicle-specific limitations, exclusions, or special conditions will be identified in the applicable purchase documents.</p>
+          <p>Every vehicle sold by Smith’s Sales &amp; Services comes with the same 90-day / 3,000-mile limited warranty, starting at delivery. The warranty’s covered components and standard exclusions are explained above and in the written warranty provided at purchase.</p>
+          <p>Any remaining factory warranty or optional extended service contract is separate and follows its own written terms. It does not change the limited warranty included with every vehicle.</p>
         </div>
       </section>
 
@@ -91,7 +90,7 @@ export const WarrantyPage = () => {
         <div className="warranty-contact-content">
           <div className="warranty-contact-intro">
             <h2>Tell us about the vehicle you’re interested in.</h2>
-            <p>We’ll confirm warranty information, including any remaining factory coverage and available options.</p>
+            <p>Every vehicle includes our 90-day / 3,000-mile limited warranty. Contact us with questions about its terms or optional extended coverage.</p>
           </div>
           <LeadForm
             title="Send Warranty Request"
@@ -101,8 +100,8 @@ export const WarrantyPage = () => {
             singleNameField
             showVehicleInterest
             phonePlaceholder="Phone*"
-            messagePlaceholder={"Message (optional)\nI'm interested in warranty information for this vehicle."}
-            actionAside={<a className="warranty-request-phone" href={business.phoneHref}>
+            messagePlaceholder="Message (optional)"
+            actionAside={<a className="warranty-request-phone" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Warranty Form Phone')}>
               <FaPhoneAlt aria-hidden="true" />
               <span><small>Prefer to talk?</small><strong>{business.phone}</strong><small>Call or Text</small></span>
             </a>}
@@ -118,8 +117,8 @@ export const WarrantyPage = () => {
       singleNameField: true,
       showVehicleInterest: true,
       phonePlaceholder: 'Phone*',
-      messagePlaceholder: "Message (optional)\nI'm interested in warranty information for this vehicle.",
-      actionAside: <a className="warranty-request-phone" href={business.phoneHref}>
+      messagePlaceholder: 'Message (optional)',
+      actionAside: <a className="warranty-request-phone" href={business.phoneHref} onClick={() => trackContactCta('phone_click', 'Warranty Dialog Phone')}>
         <FaPhoneAlt aria-hidden="true" />
         <span><small>Prefer to talk?</small><strong>{business.phone}</strong><small>Call or Text</small></span>
       </a>,

@@ -8,7 +8,7 @@ const sections = [
   ['Sharing', 'We may share information with service providers, advertising and analytics platforms, or legal and operational partners when needed to respond to your request or operate the business. We do not sell personal information as a standalone customer list.'],
   ['Cookies and tracking', 'The website may use cookies, Meta Pixel, server-side conversion tracking, and similar tools to understand site usage and advertising results. You can decline optional cookies in the site banner or adjust browser settings.'],
   ['Your choices', 'You can ask us to update, correct, or delete contact information where legally possible. You can also opt out of marketing follow-up by contacting the dealership.'],
-  ['Data security', 'We use reasonable safeguards, but no website or transmission method is completely secure. Please avoid sending sensitive financial information through open message fields.'],
+  ['Data security', 'We use reasonable safeguards, but no website or transmission method is completely secure. Please avoid sending passwords, account numbers, or other sensitive personal information through open message fields.'],
 ]
 
 export const PrivacyPage = () => (

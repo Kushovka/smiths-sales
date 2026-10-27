@@ -14,6 +14,7 @@ frontend/.env.*.local
 
 # Backend
 backend/.env
+secrets.txt
 backend/.venv/
 backend/venv/
 backend/__pycache__/

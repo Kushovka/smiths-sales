@@ -63,7 +63,7 @@ export const DeliveryPage = () => {
       </section>
 
       <section className="delivery-lot delivery-section">
-        <img src="/images/dealership-about.webp" alt="Vehicles in front of Smith’s Sales & Services in Commodore" loading="lazy" />
+        <img src="/images/dealership-about-1600.webp" width="1600" height="634" alt="Vehicles in front of Smith’s Sales & Services in Commodore" loading="lazy" />
         <div className="delivery-copy">
           <h2>From Our Lot to Your Driveway</h2>
           <p>Whether you’re across the state or across the country, we’ll arrange everything for a smooth and hassle-free delivery. We work with professional auto transport carriers to make sure your vehicle arrives safely and on time.</p>

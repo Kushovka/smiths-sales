@@ -4,8 +4,10 @@ from time import time
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.db.deps import get_db
 from app.schemas.lead import LeadCreate, LeadRead
+from app.services.capi_ticket import create_capi_ticket
 from app.services.lead_service import create_lead
 
 router = APIRouter(prefix="/leads", tags=["leads"])
@@ -55,4 +57,13 @@ def create_customer_lead(payload: LeadCreate, request: Request, db: Session = De
         if forwarded_for
         else request.client.host if request.client else None
     )
-    return create_lead(db, payload)
+    lead = create_lead(db, payload)
+    response = LeadRead.model_validate(lead).model_dump(mode="json")
+    response["capi_ticket"] = create_capi_ticket(
+        lead.id,
+        payload.meta_event_id,
+        fbp=payload.fbp,
+        fbc=payload.fbc,
+    )
+    response["capi_test_event_code"] = settings.META_TEST_EVENT_CODE or None
+    return response

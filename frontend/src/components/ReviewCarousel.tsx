@@ -22,7 +22,7 @@ export const ReviewCarousel = () => {
   return (
     <section className="reviews-section" aria-labelledby="reviews-heading">
       <div className="reviews-banner">
-        <img className="reviews-banner__image" src="/images/reviews-banner.webp" alt="" aria-hidden="true" />
+        <img className="reviews-banner__image" src="/images/reviews-banner-1000.webp" width="1000" height="333" alt="" aria-hidden="true" />
         <div className="reviews-banner__shade" aria-hidden="true" />
 
         <div className="reviews-banner__heading">

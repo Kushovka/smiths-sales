@@ -50,5 +50,25 @@ class LeadRead(BaseModel):
     source_page: str | None
     consent_to_contact: bool
     created_at: datetime
+    capi_ticket: str | None = None
+    capi_test_event_code: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CapiLeadEventCreate(BaseModel):
+    lead_id: str
+    event_id: str
+    capi_ticket: str
+    # These browser values are included for transparent Network inspection only.
+    # The server builds the Meta event from the saved lead and vehicle records.
+    email: str | None = None
+    phone: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    content_id: str | None = None
+    currency: str | None = None
+    price: int | float | None = None
+    fbp: str | None = None
+    fbc: str | None = None
+    test_event_code: str | None = None
